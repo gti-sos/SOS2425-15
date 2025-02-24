@@ -1,0 +1,20 @@
+{
+  "name": "sos2425-15",
+  "version": "1.0.0",
+  "description": "- **Team**   - Manuel Jiménez Martín (https://github.com/manueljm56)   - Fernando Lagares Luna (https://github.com/FernandoLagaresLuna)   - Gonzalo Gavilán Turiño (https://github.com/GonzaloGavilan2002) - **Project description**: Our project consists of analyzing the accumulated ra> - **Repository**: [gti-sos/SOS2425-15](https://github.com/gti-sos/SOS2425-15) - **URL**: TBD -  **APIs**:     - TBD     - TBD     - TBD",
+  "main": "index-FLL.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gti-sos/SOS2425-15.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gti-sos/SOS2425-15/issues"
+  },
+  "homepage": "https://github.com/gti-sos/SOS2425-15#readme"
+}
