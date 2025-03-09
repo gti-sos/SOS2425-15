@@ -33,12 +33,25 @@ app.get("/samples/GGT", (req,res) => {
     let respond=CalculateChanges()
         res.send(`<h1>Resultado del cálculo</h1>${respond}<p></p>`);
 });
+//Parte Manuel
+const datosM = require("./js/index-MJM.js");
 
 app.get("/samples/MJM", (req,res) => {
-    let resp=mediaAcumulaciones() 
-        res.send(`<h1>Resultado del calculo</h1><p>${resp}</p>`);
+    let resultado = "<h2> MEDIA ACUMULACIONES</h2>";
+    resultado = mediaAcumulaciones(datosM);
+    })
     
-});
+
+
+function mediaAcumulaciones(datosM){
+    conteo= 0;
+    sumaPrecipitaciones = 0;
+    datosM.forEach(x => {
+        sumaPrecipitaciones += parseFloat(x.annual_precipitation);
+        conteo += 1;
+    });
+    return sumaPrecipitaciones/conteo;
+}
 
 // Iniciar el servidor
 app.listen(PORT, () => {
