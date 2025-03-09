@@ -39,7 +39,9 @@ const datosM = require("./js/index-MJM.js");
 app.get("/samples/MJM", (req,res) => {
     let resultado = "<h2> MEDIA ACUMULACIONES</h2>";
     resultado = mediaAcumulaciones(datosM);
-    })
+    res.send(resultado)
+    });
+
     
 
 
