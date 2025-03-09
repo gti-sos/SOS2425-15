@@ -30,17 +30,17 @@ module.exports = datosM;
 
 
 
-function mediaAcumulaciones(datosM){
+function mediaAcumulaciones(ejemplos){
     conteo= 0;
     sumaPrecipitaciones = 0;
-    datosM.forEach(x => {
+    ejemplos.forEach(x => {
         sumaPrecipitaciones += parseFloat(x.annual_precipitation);
         conteo += 1;
     });
     return sumaPrecipitaciones/conteo;
 }
 
-console.log("La media de precipitaciones acumuladas es: ",mediaAcumulaciones(datos));
+console.log("La media de precipitaciones acumuladas es: ",mediaAcumulaciones(datosM));
 
 
 
