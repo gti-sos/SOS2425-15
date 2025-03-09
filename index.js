@@ -59,6 +59,34 @@ function media_Acumulaciones(ejemplos){
     return sumaPrecipitaciones/conteo;
 }
 
+
+
+//Parte Fernando
+const datosF = require("./index-FLL.js");
+
+app.get("/samples/FLL", (req,res) => {
+    let resultado = "<h2> MEDIA Ground</h2>";
+    resultado += media_Ground(datosF);
+    res.send(`<h1>Resultado del cálculo</h1>${resultado}<p></p>`)
+    });
+
+    
+
+function media_Ground(datos) {
+    let sumaGround = 0;
+    let cantidad = 0;
+    
+    datos.forEach(element => {
+        sumaGround += element.ground;
+        cantidad += 1;
+    });
+    
+    return sumaGround / cantidad;
+}
+
+
+
+
 // Iniciar el servidor
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}!`);

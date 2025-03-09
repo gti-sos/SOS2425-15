@@ -1,4 +1,4 @@
-let surfaceData = [
+const datosF = [
     {year: "2021", province: "cadiz", ground: 177000, grass: 300000, wooded: 250000, non_agrarian_surface: 70000},
     {year: "2021", province: "almería", ground: 177590, grass: 363915, wooded: 257241, non_agrarian_surface: 78557},
     {year: "2021", province: "cordoba", ground: 728625, grass: 161589, wooded: 391269, non_agrarian_surface: 95577},
@@ -10,6 +10,10 @@ let surfaceData = [
     {year: "2021", province: "caceres", ground: 397184, grass: 335124, wooded: 306463, non_agrarian_surface: 483914},
     {year: "2018", province: "cadiz", ground: 292937, grass: 109096, wooded: 239226, non_agrarian_surface: 102365}
 ];
+
+
+module.exports = datosF;
+
 
 function mediaTotalGround(datos) {
     let sumaGround = 0;
@@ -23,4 +27,4 @@ function mediaTotalGround(datos) {
     return sumaGround / cantidad;
 }
 
-console.log(mediaTotalGround(surfaceData));
+console.log(mediaTotalGround(datosF));
