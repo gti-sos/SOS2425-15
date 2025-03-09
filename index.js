@@ -3,10 +3,6 @@ const path = require("path");
 const cool = require("cool-ascii-faces");
 const app = express();
 const PORT = process.env.PORT || 16078;
-const calculatePointsDeducted = require("./js/index-FLL"); // Importamos la función corregida
-const CalculateChanges = require("./js/index-GGT");
-const calculateDeceased = require("./js/index-MJM");
-const mediaAcumulaciones = require("./js/index-MJM");
 
 
 // Servir archivos estáticos desde la carpeta "public"
@@ -23,7 +19,7 @@ app.get("/cool", (req, res) => {
 });
 
 // Nueva ruta "/samples/DLC" para ejecutar el algoritmo y devolver el resultado
-app.get("/samples/FLL", (req, res) => {
+/*app.get("/samples/FLL", (req, res) => {
     let ress = calculatePointsDeducted()    
         res.send(`<h1>Resultado del cálculo</h1><p>${ress.toFixed(2)}</p>`);
 });
@@ -32,9 +28,9 @@ app.get("/samples/FLL", (req, res) => {
 app.get("/samples/GGT", (req,res) => {
     let respond=CalculateChanges()
         res.send(`<h1>Resultado del cálculo</h1>${respond}<p></p>`);
-});
+});*/
 //Parte Manuel
-const datosM = require("./js/index-MJM.js");
+const datosM = require("./index-MJM.js");
 
 app.get("/samples/MJM", (req,res) => {
     let resultado = "<h2> MEDIA ACUMULACIONES</h2>";
