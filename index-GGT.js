@@ -1,4 +1,4 @@
-let concatList = [
+let datosG = [
     {year: "2020", province: "Almería", average_temperature: "16.2", minimum_average: "11.2", maximum_average: "21.9"},
     {year: "2020", province: "Cádiz", average_temperature: "18.0", minimum_average: "13.1", maximum_average: "23.6"},
     {year: "2020", province: "Córdoba", average_temperature: "17.3", minimum_average: "11.0", maximum_average: "23.9"},
@@ -33,6 +33,8 @@ let concatList = [
     {year: "2023", province: "Sevilla", average_temperature: "18.8", minimum_average: "12.1", maximum_average: "25.9"}
 ];
 
+module.exports = datosG;
+
 function mediaTotalConjunta(datos){
     cantidad = 0;
     sumaTemperaturas = 0;
@@ -43,4 +45,4 @@ function mediaTotalConjunta(datos){
     return sumaTemperaturas/cantidad;
 }
 
-console.log(mediaTotalConjunta(concatList));
+console.log(mediaTotalConjunta(datosG));

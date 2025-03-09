@@ -26,17 +26,31 @@ app.get("/cool", (req, res) => {
     res.send(cool());
 });
 
-// Nueva ruta "/samples/DLC" para ejecutar el algoritmo y devolver el resultado
-/*app.get("/samples/FLL", (req, res) => {
-    let ress = calculatePointsDeducted()    
-        res.send(`<h1>Resultado del cálculo</h1><p>${ress.toFixed(2)}</p>`);
-});
 
-// Nueva ruta "samples/JVF" para ejecutar el algoritmo y devolver el resultado 
+
+//Parte Gonzalo
+const datosG = require("./index-GGT.js");
+
 app.get("/samples/GGT", (req,res) => {
-    let respond=CalculateChanges()
-        res.send(`<h1>Resultado del cálculo</h1>${respond}<p></p>`);
-});*/
+    let resultado = "<h2>Media Total conjunta:</h2>";
+    resultado += media_TotalConjunta(datosG);
+    res.send(`<h1>Resultado del cálculo</h1>${resultado}<p></p>`)
+    });
+
+    
+
+
+function media_TotalConjunta(datos){
+    cantidad = 0;
+    sumaTemperaturas = 0;
+    datos.forEach(element => {
+        sumaTemperaturas += parseFloat(element.average_temperature);
+        cantidad += 1;
+    });
+    return sumaTemperaturas/cantidad;
+}
+
+
 //Parte Manuel
 const datosM = require("./index-MJM.js");
 
