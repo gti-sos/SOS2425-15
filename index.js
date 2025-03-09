@@ -8,9 +8,17 @@ const PORT = process.env.PORT || 16078;
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+
+app.get("/", (req, res) => {
+    res.send(`
+        <h1>Bienvenido a la API del Grupo 13</h1>
+       
+    `);
+});
 // Ruta para servir "about.html" en "/about"
 app.get("/about", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/about.html"));
+    res.sendFile(path.join(__dirname, "/about.html"));
 });
 
 // Ruta para "/cool"
@@ -35,7 +43,7 @@ const datosM = require("./index-MJM.js");
 app.get("/samples/MJM", (req,res) => {
     let resultado = "<h2> MEDIA ACUMULACIONES</h2>";
     resultado = media_Acumulaciones(datosM);
-    res.send(`<h1>Resultado del cálculoo</h1>${resultado}<p></p>`)
+    res.send(`<h1>Resultado del cálculo</h1>${resultado}<p></p>`)
     });
 
     
