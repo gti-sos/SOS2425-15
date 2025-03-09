@@ -42,17 +42,17 @@ const datosM = require("./index-MJM.js");
 
 app.get("/samples/MJM", (req,res) => {
     let resultado = "<h2> MEDIA ACUMULACIONES</h2>";
-    resultado = media_Acumulaciones(datosM);
+    resultado += media_Acumulaciones(datosM);
     res.send(`<h1>Resultado del cálculo</h1>${resultado}<p></p>`)
     });
 
     
 
 
-function media_Acumulaciones(datosM){
+function media_Acumulaciones(ejemplos){
     conteo= 0;
     sumaPrecipitaciones = 0;
-    datosM.forEach(x => {
+    ejemplos.forEach(x => {
         sumaPrecipitaciones += parseFloat(x.annual_precipitation);
         conteo += 1;
     });
