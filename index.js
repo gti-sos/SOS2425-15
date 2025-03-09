@@ -12,13 +12,13 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.get("/", (req, res) => {
     res.send(`
-        <h1>Bienvenido a la API del Grupo 13</h1>
+        <h1>Bienvenido a la API del Grupo 15</h1>
        
     `);
 });
 // Ruta para servir "about.html" en "/about"
 app.get("/about", (req, res) => {
-    res.sendFile(path.join(__dirname, "/about.html"));
+    res.sendFile(path.join(__dirname, "/public/about.html"));
 });
 
 // Ruta para "/cool"
