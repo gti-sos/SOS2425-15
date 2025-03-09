@@ -39,7 +39,7 @@ const datosM = require("./js/index-MJM.js");
 app.get("/samples/MJM", (req,res) => {
     let resultado = "<h2> MEDIA ACUMULACIONES</h2>";
     resultado = mediaAcumulaciones(datosM);
-    res.send(resultado)
+    res.send(`<h1>Resultado del cálculoo</h1>${resultado}<p></p>`)
     });
 
     
