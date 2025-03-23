@@ -1,4 +1,10 @@
-let datos = [
+
+
+
+
+
+
+const datosM = [
     { year: 2020, province: "Sevilla", annual_precipitation: 210.6, historical_average: 292.9, deviation: -82.4 },
     { year: 2020, province: "Cádiz", annual_precipitation: 578.6, historical_average: 722.9, deviation: -144.3 },
     { year: 2020, province: "Córdoba", annual_precipitation: 450.2, historical_average: 557.9, deviation: -107.7 },
@@ -20,6 +26,8 @@ let datos = [
     { year: 2022, province: "Granada", annual_precipitation: 372.7, historical_average: 430.5, deviation: -57.8 }
 ];
 
+module.exports = datosM;
+
 
 
 function mediaAcumulaciones(ejemplos){
@@ -32,7 +40,7 @@ function mediaAcumulaciones(ejemplos){
     return sumaPrecipitaciones/conteo;
 }
 
-console.log("La media de precipitaciones acumuladas es: ",mediaAcumulaciones(datos));
+console.log("La media de precipitaciones acumuladas es: ",mediaAcumulaciones(datosM));
 
 
 
