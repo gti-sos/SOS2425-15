@@ -28,3 +28,6 @@ function mediaTotalGround(datos) {
 }
 
 console.log(mediaTotalGround(datosF));
+
+
+
