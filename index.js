@@ -3,6 +3,7 @@ const path = require("path");
 const cool = require("cool-ascii-faces");
 const app = express();
 const PORT = process.env.PORT || 16078;
+const BASE_API = "/api/v1"
 
 
 // Servir archivos estáticos desde la carpeta "public"
@@ -256,6 +257,142 @@ app.delete(BASE_API + "/ocupied-grand-stats" + "/:province", (request, response)
     if (exists){
         ocupied_grand_stats = ocupied_grand_stats.filter(x => x.province !== province);
         return response.status(200).json(ocupied_grand_stats);
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+    }
+});
+
+
+//Parte Manuel
+
+//Parte Manuel
+let precipitation_stats = [];
+
+//loadInitialData
+app.get(BASE_API + "/precipitation-stats/loadInitialData", (request, response) => {
+    console.log("New GET to /loadInitialData");
+    if (precipitation_stats.length > 0) {
+        return response.status(400).json({ message: "El array ya contiene datos " });
+    }
+    else{
+
+        precipitation_stats = [
+            { year: 2020, province: "Sevilla", annual_precipitation: 210.6, historical_average: 292.9, deviation: -82.4 },
+            { year: 2020, province: "Cádiz", annual_precipitation: 578.6, historical_average: 722.9, deviation: -144.3 },
+            { year: 2020, province: "Córdoba", annual_precipitation: 450.2, historical_average: 557.9, deviation: -107.7 },
+            { year: 2020, province: "Granada", annual_precipitation: 344.5, historical_average: 430.5, deviation: -86 },
+            { year: 2020, province: "Huelva", annual_precipitation: 617.5, historical_average: 644.6, deviation: -27.1 },
+            { year: 2020, province: "Jaén", annual_precipitation: 411.3, historical_average: 549.4, deviation: -138 },
+            { year: 2020, province: "Almería", annual_precipitation: 210.6, historical_average: 292.9, deviation: -82.4 },
+            { year: 2020, province: "Sevilla", annual_precipitation: 472, historical_average: 559.7, deviation: -87.7 },
+            { year: 2021, province: "Sevilla", annual_precipitation: 440.7, historical_average: 559.7, deviation: -119 },
+            { year: 2022, province: "Sevilla", annual_precipitation: 451.8, historical_average: 559.7, deviation: -107.9 },
+            { year: 2021, province: "Cádiz", annual_precipitation: 568.5, historical_average: 722.9, deviation: -154.3 },
+            { year: 2021, province: "Córdoba", annual_precipitation: 433.4, historical_average: 557.9, deviation: -124.5 },
+            { year: 2021, province: "Granada", annual_precipitation: 309, historical_average: 430.5, deviation: -121.5 },
+            { year: 2021, province: "Huelva", annual_precipitation: 484, historical_average: 644.6, deviation: -160.6 },
+            { year: 2021, province: "Jaén", annual_precipitation: 432.3, historical_average: 549.4, deviation: -117.1 },
+            { year: 2022, province: "Málaga", annual_precipitation: 580.4, historical_average: 628.4, deviation: -47.9 },
+            { year: 2022, province: "Cádiz", annual_precipitation: 639.2, historical_average: 722.9, deviation: -83.7 },
+            { year: 2022, province: "Córdoba", annual_precipitation: 441.2, historical_average: 557.9, deviation: -116.7 },
+            { year: 2022, province: "Granada", annual_precipitation: 372.7, historical_average: 430.5, deviation: -57.8 }    
+        ];
+        console.log(precipitation_stats);
+
+        response.status(201).json(precipitation_stats);
+    }
+});
+
+//GET
+app.get(BASE_API + "/precipitation-stats", (request, response) => {
+    console.log("New GET to /precipitation-stats");
+    response.send(JSON.stringify(precipitation_stats));
+});
+
+
+app.get(BASE_API + "/precipitation-stats" + "/:province", (request, response) => {
+    const province = request.params.province;
+    console.log(`New GET to /precipitation-stats/${province}`);
+
+    const search = precipitation_stats.filter(x => x.province === province);
+    if (search.length > 0){
+        return response.status(200).json(search);
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+    }
+});
+
+//POST
+app.post(BASE_API + "/precipitation-stats", (request, response) => {
+    console.log("New POST to /precipitation-stats");
+    let newData = request.body;
+    if (precipitation_stats.some(x =>  x.year === newData.year && x.province === newData.province && x.annual_precipitation === newData.annual_precipitation)){
+        return response.status(409).json({ error: "Ya existe ese dato" });
+    }
+    else{
+        if (!newData.year || !newData.province || !newData.annual_precipitation || !newData.historical_average || !newData.deviation) {
+            return response.status(400).json({ error: "Faltan datos requeridos" });
+        }
+        else{
+            precipitation_stats.push(newData);
+            response.sendStatus(201);
+        }
+    }
+});
+
+
+app.post(BASE_API + "/precipitation-stats/:province", (request, response) => {
+    const province = request.params.province;
+    console.log(`New POST to /precipitation-stats/${province}`);
+    response.status(405).json({error : "Método POST no permitido"});
+});
+
+
+//PUT
+app.put(BASE_API + "/precipitation-stats", (request, response) => {
+    console.log("New PUT to /precipitation-stats");
+    response.status(405).json({error : "Método PUT no permitido"});
+});
+
+
+app.put(BASE_API + "/precipitation-stats/:province", (request, response) => {
+    let province = request.params.province;
+    console.log(`New PUT to /precipitation-stats/${province}`);
+
+    const index = precipitation_stats.findIndex(x => x.province == province);
+    if (index >= 0){
+        let data = request.body;
+        precipitation_stats[index] = {
+            ...precipitation_stats[index], // mantiene los datos actuales
+            ...data                      // sobrescribe solo los campos enviados
+        };
+        response.status(200).json({message : "Datos actualizados"});
+        
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+    }
+
+});
+
+//DELETE
+app.delete(BASE_API + "/precipitation-stats", (request, response) => {
+    console.log("New DELETE to /precipitation-stats");
+    precipitation_stats = [];
+    response.status(200).json(precipitation_stats);
+});
+
+
+app.delete(BASE_API + "/precipitation-stats" + "/:province", (request, response) => {
+    const province = request.params.province;
+    console.log(`New GET to /precipitation-stats/${province}`);
+
+    const exists = precipitation_stats.some(x => x.province === province);
+    if (exists){
+        precipitation_stats = precipitation_stats.filter(x => x.province !== province);
+        return response.status(200).json(precipitation_stats);
     }
     else{   
         return response.status(404).json({error: `No se encuentran datos de ${province}`});
