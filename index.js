@@ -8,6 +8,7 @@ const BASE_API = "/api/v1"
 
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.json());
 
 
 
