@@ -398,3 +398,149 @@ app.delete(BASE_API + "/precipitation-stats" + "/:province", (request, response)
         return response.status(404).json({error: `No se encuentran datos de ${province}`});
     }
 });
+
+//Parte Gonzalo
+let temperature_stats = [];
+
+//loadInitialData
+app.get(BASE_API + "/temperature-stats/loadInitialData", (request, response) => {
+    console.log("New GET to /loadInitialData");
+    if (temperature_stats.length > 0) {
+        return response.status(400).json({ message: "El array ya contiene datos " });
+    }
+    else{
+
+        temperature_stats = [
+            {year: "2020", province: "Almería", average_temperature: "16.2", minimum_average: "11.2", maximum_average: "21.9"},
+            {year: "2020", province: "Cádiz", average_temperature: "18.0", minimum_average: "13.1", maximum_average: "23.6"},
+            {year: "2020", province: "Córdoba", average_temperature: "17.3", minimum_average: "11.0", maximum_average: "23.9"},
+            {year: "2020", province: "Granada", average_temperature: "14.5", minimum_average: "8.7", maximum_average: "20.9"},
+            {year: "2020", province: "Huelva", average_temperature: "17.9", minimum_average: "12.1", maximum_average: "24.1"},
+            {year: "2020", province: "Jaén", average_temperature: "16.3", minimum_average: "10.3", maximum_average: "22.9"},
+            {year: "2020", province: "Málaga", average_temperature: "17.0", minimum_average: "12.2", maximum_average: "22.4"},
+            {year: "2020", province: "Sevilla", average_temperature: "18.2", minimum_average: "12.1", maximum_average: "24.8"},
+            {year: "2021", province: "Almería", average_temperature: "16.1", minimum_average: "11.2", maximum_average: "21.6"},
+            {year: "2021", province: "Cádiz", average_temperature: "17.8", minimum_average: "13.0", maximum_average: "23.2"},
+            {year: "2021", province: "Córdoba", average_temperature: "17.0", minimum_average: "10.6", maximum_average: "23.7"},
+            {year: "2021", province: "Granada", average_temperature: "14.2", minimum_average: "8.4", maximum_average: "20.4"},
+            {year: "2021", province: "Huelva", average_temperature: "17.5", minimum_average: "11.6", maximum_average: "23.9"},
+            {year: "2021", province: "Jaén", average_temperature: "16.1", minimum_average: "9.9", maximum_average: "22.5"},
+            {year: "2021", province: "Málaga", average_temperature: "17.1", minimum_average: "12.2", maximum_average: "22.4"},
+            {year: "2021", province: "Sevilla", average_temperature: "18.0", minimum_average: "11.8", maximum_average: "24.7"},
+            {year: "2022", province: "Almería", average_temperature: "16.9", minimum_average: "11.7", maximum_average: "22.6"},
+            {year: "2022", province: "Cádiz", average_temperature: "18.7", minimum_average: "13.7", maximum_average: "24.2"},
+            {year: "2022", province: "Córdoba", average_temperature: "18.0", minimum_average: "11.3", maximum_average: "24.8"},
+            {year: "2022", province: "Granada", average_temperature: "15.4", minimum_average: "9.4", maximum_average: "21.9"},
+            {year: "2022", province: "Huelva", average_temperature: "18.3", minimum_average: "12.3", maximum_average: "24.8"},
+            {year: "2022", province: "Jaén", average_temperature: "17.1", minimum_average: "10.9", maximum_average: "23.7"},
+            {year: "2022", province: "Málaga", average_temperature: "17.9", minimum_average: "13.0", maximum_average: "23.3"},
+            {year: "2022", province: "Sevilla", average_temperature: "18.7", minimum_average: "12.4", maximum_average: "25.6"},
+            {year: "2023", province: "Almería", average_temperature: "17.1", minimum_average: "11.7", maximum_average: "23.0"},
+            {year: "2023", province: "Cádiz", average_temperature: "18.6", minimum_average: "13.4", maximum_average: "24.5"},
+            {year: "2023", province: "Córdoba", average_temperature: "17.8", minimum_average: "11.0", maximum_average: "24.8"},
+            {year: "2023", province: "Granada", average_temperature: "15.3", minimum_average: "9.1", maximum_average: "21.9"},
+            {year: "2023", province: "Huelva", average_temperature: "18.5", minimum_average: "12.3", maximum_average: "25.2"},
+            {year: "2023", province: "Jaén", average_temperature: "17.0", minimum_average: "10.5", maximum_average: "23.8"},
+            {year: "2023", province: "Málaga", average_temperature: "18.0", minimum_average: "12.9", maximum_average: "23.7"},
+            {year: "2023", province: "Sevilla", average_temperature: "18.8", minimum_average: "12.1", maximum_average: "25.9"}   
+        ];
+        console.log(temperature_stats);
+
+        response.status(201).json(temperature_stats);
+    }
+});
+
+//GET
+app.get(BASE_API + "/temperature-stats", (request, response) => {
+    console.log("New GET to /temperature-stats");
+    response.send(JSON.stringify(temperature_stats));
+});
+
+
+app.get(BASE_API + "/temperature-stats" + "/:province", (request, response) => {
+    const province = request.params.province;
+    console.log(`New GET to /temperature-stats/${province}`);
+
+    const search = temperature_stats.filter(x => x.province === province);
+    if (search.length > 0){
+        return response.status(200).json(search);
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+    }
+});
+
+//POST
+app.post(BASE_API + "/temperature-stats", (request, response) => {
+    console.log("New POST to /temperature-stats");
+    let newData = request.body;
+    if (temperature_stats.some(x =>  x.year === newData.year && x.province === newData.province && x.average_temperature === newData.average_temperature && x.minimum_average == newData.minimum_average && x.maximum_average == newData.maximum_average)){
+        return response.status(409).json({ error: "Ya existe ese dato" });
+    }
+    else{
+        if (!newData.year || !newData.province || !newData.average_temperature || !newData.minimum_average || !newData.maximum_average) {
+            return response.status(400).json({ error: "Faltan datos requeridos" });
+        }
+        else{
+            temperature_stats.push(newData);
+            response.sendStatus(201);
+        }
+    }
+});
+
+
+app.post(BASE_API + "/temperature-stats/:province", (request, response) => {
+    const province = request.params.province;
+    console.log(`New POST to /temperature-stats/${province}`);
+    response.status(405).json({error : "Método POST no permitido"});
+});
+
+
+//PUT
+app.put(BASE_API + "/temperature-stats", (request, response) => {
+    console.log("New PUT to /temperature-stats");
+    response.status(405).json({error : "Método PUT no permitido"});
+});
+
+
+app.put(BASE_API + "/temperature-stats/:province", (request, response) => {
+    let province = request.params.province;
+    console.log(`New PUT to /temperature-stats/${province}`);
+
+    const index = temperature_stats.findIndex(x => x.province == province);
+    if (index >= 0){
+        let data = request.body;
+        temperature_stats[index] = {
+            ...temperature_stats[index], // mantiene los datos actuales
+            ...data                      // sobrescribe solo los campos enviados
+        };
+        response.status(200).json({message : "Datos actualizados"});
+        
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+    }
+
+});
+
+//DELETE
+app.delete(BASE_API + "/temperature-stats", (request, response) => {
+    console.log("New DELETE to /temperature-stats");
+    temperature_stats = [];
+    response.status(200).json(temperature_stats);
+});
+
+
+app.delete(BASE_API + "/temperature-stats" + "/:province", (request, response) => {
+    const province = request.params.province;
+    console.log(`New GET to /temperature-stats/${province}`);
+
+    const exists = temperature_stats.some(x => x.province === province);
+    if (exists){
+        temperature_stats = temperature_stats.filter(x => x.province !== province);
+        return response.status(200).json(temperature_stats);
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+    }
+});
