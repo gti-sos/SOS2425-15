@@ -475,7 +475,7 @@ app.get(BASE_API + "/temperature-stats" + "/:province", (request, response) => {
 app.post(BASE_API + "/temperature-stats", (request, response) => {
     console.log("New POST to /temperature-stats");
     let newData = request.body;
-    if (temperature_stats.some(x =>  x.year === newData.year && x.province === newData.province && x.average_temperature === newData.average_temperature && x.minimum_average == newData.minimum_average && x.maximum_average == newData.maximum_average)){
+    if (temperature_stats.some(x =>  x.year === newData.year && x.province === newData.province)){
         return response.status(409).json({ error: "Ya existe ese dato" });
     }
     else{
