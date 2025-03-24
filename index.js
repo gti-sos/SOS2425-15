@@ -283,15 +283,20 @@ app.put(BASE_API + "/ocupied-grand-stats/:province/:year", (req, res) => {
     const year = parseInt(req.params.year);
     const province = req.params.province;
     const index = ocupied_grand_stats.findIndex(x => x.year === year && x.province === province);
+
     if (index === -1) return res.status(404).json({ error: "Record not found" });
-    if (req.body.year !== year || req.body.province !== province) {
+
+    // Corregir comparación de year
+    if (parseInt(req.body.year) !== year || req.body.province !== province) {
         return res.status(400).json({ error: "Year and province in body must match URL parameters" });
     }
+
     ocupied_grand_stats[index] = { ...ocupied_grand_stats[index], ...req.body };
     res.status(200).json({ message: "Record updated successfully" });
 });
+
 //FALLO DE PUT a todos los datos
-app.put(BASE_API + "/ocupied-grand-stats/",(req,res)=>{    
+app.put(BASE_API + "/precipitation-stats/",(req,res)=>{    
     
     res.sendStatus(405);
 });
