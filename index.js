@@ -415,7 +415,7 @@ app.post(BASE_API + "/precipitation-stats/:province", (request, response) => {
 
 
 //PUT
-app.put(BASE_API + "/precipitation-stats", (request, response) => {
+/*app.put(BASE_API + "/precipitation-stats", (request, response) => {
     console.log("New PUT to /precipitation-stats");
     response.status(405).json({error : "Método PUT no permitido"});
 });
@@ -440,6 +440,23 @@ app.put(BASE_API + "/precipitation-stats/:province/:year/", (request, response) 
         return response.status(404).json({error: `No se encuentran datos de ${province} en ${year}`});
     }
 
+});*/
+// Modificar un registro existente
+app.put(BASE_API + "/precipitation-stats/:province/:year", (req, res) => {
+    const year = parseInt(req.params.year);
+    const province = req.params.province;
+    const index = precipitation_stats.findIndex(x => x.year === year && x.province === province);
+    if (index === -1) return res.status(404).json({ error: "Record not found" });
+    if (req.body.year !== year || req.body.province !== province) {
+        return res.status(400).json({ error: "Year and province in body must match URL parameters" });
+    }
+    precipitation_stats[index] = { ...precipitation_stats[index], ...req.body };
+    res.status(200).json({ message: "Record updated successfully" });
+});
+//FALLO DE PUT a todos los datos
+app.put(BASE_API + "/precipitation-stats/",(req,res)=>{    
+    
+    res.sendStatus(405);
 });
 
 //DELETE
