@@ -306,13 +306,13 @@ app.get(BASE_API + "/precipitation-stats/loadInitialData", (request, response) =
 });
 
 //GET
-app.get(BASE_API + "/precipitation-stats", (request, response) => {
+/*app.get(BASE_API + "/precipitation-stats", (request, response) => {
     console.log("New GET to /precipitation-stats");
     response.send(JSON.stringify(precipitation_stats));
-});
+});*/
 
 
-app.get(BASE_API + "/precipitation-stats" + "/:province", (request, response) => {
+app.get(BASE_API + "/precipitation-stats" + "/:province" , (request, response) => {
     const province = request.params.province;
     console.log(`New GET to /precipitation-stats/${province}`);
 
@@ -325,6 +325,69 @@ app.get(BASE_API + "/precipitation-stats" + "/:province", (request, response) =>
     }
 });
 
+/*app.get(BASE_API + "/precipitation-stats"+ "/:province" + "/:year" , (request, response) => {
+    const province = request.params.province;
+    const year = request.params.year;
+    console.log(`New GET to /precipitation-stats/${province}/${year}`);
+
+    const search = precipitation_stats.filter(x => x.province === province && x.year == year);
+    if (search.length > 0){
+        return response.status(200).json(search);
+    }
+    else{   
+        return response.status(404).json({error: `No se encuentran datos de ${province} en ${year}`});
+    }
+});*/
+app.get(BASE_API + "/precipitation-stats", (req, res) => {
+    let datosFiltrados = precipitation_stats;
+    let { from, to, year, province } = req.query;
+
+    // Filtrar por rango de años (from y to)
+    if (from !== undefined) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.year >= Number(from));
+    }
+    if (to !== undefined) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.year <= Number(to));
+    }
+
+    // Filtrar por un año específico
+    if (year !== undefined) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.year === Number(year));
+    }
+
+    // Filtrar por provincia (sin importar mayúsculas/minúsculas ni espacios)
+    if (province !== undefined) {
+        const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+        datosFiltrados = datosFiltrados.filter(stat => normalizeProvince(stat.province) === normalizeProvince(province));
+    }
+
+    return res.status(200).json(datosFiltrados);
+});
+// Obtener registros por año y provincia
+app.get(BASE_API + "/precipitation-stats/:province/:year", (req, res) => {
+    const year = parseInt(req.params.year);
+    const province = req.params.province.toLowerCase();
+
+    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+
+    const data = precipitation_stats.filter(x =>
+        x.year === year && normalizeProvince(x.province) === normalizeProvince(province)
+    );
+
+    if (data.length === 0) {
+        return res.status(404).json({ error: "No data found for the given year and province" });
+    }
+    res.status(200).json(data);
+});
+
+// Cargar datos iniciales
+app.get(BASE_API + "/precipitation-stats/loadInitialData", (req, res) => {
+    if (precipitation_stats.length === 0) {
+        precipitation_stats.push(...precipitation_stats.slice(0, 10));
+        return res.status(201).json({ message: "Initial data loaded", data: precipitation_stats });
+    }
+    res.status(200).json({ message: "Data already initialized", data: precipitation_stats});
+});
 //POST
 app.post(BASE_API + "/precipitation-stats", (request, response) => {
     console.log("New POST to /precipitation-stats");
@@ -358,11 +421,12 @@ app.put(BASE_API + "/precipitation-stats", (request, response) => {
 });
 
 
-app.put(BASE_API + "/precipitation-stats/:province", (request, response) => {
+app.put(BASE_API + "/precipitation-stats/:province/:year/", (request, response) => {
     let province = request.params.province;
-    console.log(`New PUT to /precipitation-stats/${province}`);
+    let year = request.params.year;
+    console.log(`New PUT to /precipitation-stats/${province}/${year}`);
 
-    const index = precipitation_stats.findIndex(x => x.province == province);
+    const index = precipitation_stats.findIndex(x => x.province == province && x.year == year);
     if (index >= 0){
         let data = request.body;
         precipitation_stats[index] = {
@@ -373,7 +437,7 @@ app.put(BASE_API + "/precipitation-stats/:province", (request, response) => {
         
     }
     else{   
-        return response.status(404).json({error: `No se encuentran datos de ${province}`});
+        return response.status(404).json({error: `No se encuentran datos de ${province} en ${year}`});
     }
 
 });
