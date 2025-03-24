@@ -573,14 +573,10 @@ app.get(BASE_API + "/temperature-stats/loadInitialData", (request, response) => 
     }
 });
 
-//GET
-app.get(BASE_API + "/temperature-stats", (request, response) => {
-    console.log("New GET to /temperature-stats");
-    response.send(JSON.stringify(temperature_stats));
-});
 
 
-app.get(BASE_API + "/temperature-stats" + "/:province", (request, response) => {
+
+app.get(BASE_API + "/temperature-stats" + "/:province" , (request, response) => {
     const province = request.params.province;
     console.log(`New GET to /temperature-stats/${province}`);
 
@@ -591,6 +587,58 @@ app.get(BASE_API + "/temperature-stats" + "/:province", (request, response) => {
     else{   
         return response.status(404).json({error: `No se encuentran datos de ${province}`});
     }
+});
+
+
+app.get(BASE_API + "/temperature-stats", (req, res) => {
+    let datosFiltrados = temperature_stats;
+    let { from, to, year, province } = req.query;
+
+    // Filtrar por rango de años (from y to)
+    if (from !== undefined) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.year >= Number(from));
+    }
+    if (to !== undefined) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.year <= Number(to));
+    }
+
+    // Filtrar por un año específico
+    if (year !== undefined) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.year === Number(year));
+    }
+
+    // Filtrar por provincia (sin importar mayúsculas/minúsculas ni espacios)
+    if (province !== undefined) {
+        const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+        datosFiltrados = datosFiltrados.filter(stat => normalizeProvince(stat.province) === normalizeProvince(province));
+    }
+
+    return res.status(200).json(datosFiltrados);
+});
+// Obtener registros por año y provincia
+app.get(BASE_API + "/temperature-stats/:province/:year", (req, res) => {
+    const year = parseInt(req.params.year);
+    const province = req.params.province.toLowerCase();
+
+    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+
+    const data = temperature_stats.filter(x =>
+        x.year === year && normalizeProvince(x.province) === normalizeProvince(province)
+    );
+
+    if (data.length === 0) {
+        return res.status(404).json({ error: "No data found for the given year and province" });
+    }
+    res.status(200).json(data);
+});
+
+// Cargar datos iniciales
+app.get(BASE_API + "/temperature-stats/loadInitialData", (req, res) => {
+    if (temperature_stats.length === 0) {
+        temperature_stats.push(...temperature_stats.slice(0, 10));
+        return res.status(201).json({ message: "Initial data loaded", data: temperature_stats });
+    }
+    res.status(200).json({ message: "Data already initialized", data: temperature_stats});
 });
 
 //POST
@@ -620,30 +668,23 @@ app.post(BASE_API + "/temperature-stats/:province", (request, response) => {
 
 
 //PUT
-app.put(BASE_API + "/temperature-stats", (request, response) => {
-    console.log("New PUT to /temperature-stats");
-    response.status(405).json({error : "Método PUT no permitido"});
+
+// Modificar un registro existente
+app.put(BASE_API + "/temperature-stats/:province/:year", (req, res) => {
+    const year = parseInt(req.params.year);
+    const province = req.params.province;
+    const index = temperature_stats.findIndex(x => x.year === year && x.province === province);
+    if (index === -1) return res.status(404).json({ error: "Record not found" });
+    if (req.body.year !== year || req.body.province !== province) {
+        return res.status(400).json({ error: "Year and province in body must match URL parameters" });
+    }
+    temperature_stats[index] = { ...temperature_stats[index], ...req.body };
+    res.status(200).json({ message: "Record updated successfully" });
 });
-
-
-app.put(BASE_API + "/temperature-stats/:province", (request, response) => {
-    let province = request.params.province;
-    console.log(`New PUT to /temperature-stats/${province}`);
-
-    const index = temperature_stats.findIndex(x => x.province == province);
-    if (index >= 0){
-        let data = request.body;
-        temperature_stats[index] = {
-            ...temperature_stats[index], // mantiene los datos actuales
-            ...data                      // sobrescribe solo los campos enviados
-        };
-        response.status(200).json({message : "Datos actualizados"});
-        
-    }
-    else{   
-        return response.status(404).json({error: `No se encuentran datos de ${province}`});
-    }
-
+//FALLO DE PUT a todos los datos
+app.put(BASE_API + "/temperature-stats/",(req,res)=>{    
+    
+    res.sendStatus(405);
 });
 
 //DELETE
