@@ -156,7 +156,25 @@ app.get(BASE_API + "/ocupied-grand-stats/loadInitialData", (request, response) =
 
 //GET
 
+app.get(BASE_API + "/ocupied-grand-stats/:province", (req, res) => {
+    const provinceParam = req.params.province.toLowerCase();
+    const { from, to } = req.query;
 
+    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+
+    let filteredData = ocupied_grand_stats.filter(x =>
+        normalizeProvince(x.province) === normalizeProvince(provinceParam)
+    );
+
+    if (from !== undefined) {
+        filteredData = filteredData.filter(stat => stat.year >= Number(from));
+    }
+    if (to !== undefined) {
+        filteredData = filteredData.filter(stat => stat.year <= Number(to));
+    }
+
+    res.status(200).json(filteredData);
+});
 
 app.get(BASE_API + "/ocupied-grand-stats" + "/:province" , (request, response) => {
     const province = request.params.province;
@@ -598,7 +616,25 @@ app.get(BASE_API + "/temperature-stats/loadInitialData", (request, response) => 
 });
 
 
+app.get(BASE_API + "/temperature-stats/:province", (req, res) => {
+    const provinceParam = req.params.province.toLowerCase();
+    const { from, to } = req.query;
 
+    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+
+    let filteredData = temperature_stats.filter(x =>
+        normalizeProvince(x.province) === normalizeProvince(provinceParam)
+    );
+
+    if (from !== undefined) {
+        filteredData = filteredData.filter(stat => stat.year >= Number(from));
+    }
+    if (to !== undefined) {
+        filteredData = filteredData.filter(stat => stat.year <= Number(to));
+    }
+
+    res.status(200).json(filteredData);
+});
 
 app.get(BASE_API + "/temperature-stats" + "/:province" , (request, response) => {
     const province = request.params.province;
