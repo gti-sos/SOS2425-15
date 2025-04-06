@@ -1,4 +1,4 @@
-# SOS2425-15 l04
+# SOS2425-15 l06
 
 - **Team**
   - Manuel Jiménez Martín (https://github.com/manueljm56)
@@ -12,6 +12,6 @@
 - **URL**: https://sos2425-15.onrender.com
 >>>>>>> l04
 -  **APIs**:
-    - TBD
-    - TBD
-    - TBD
+    - http://sos2425-15.onrender/api/v1/precipitation-stats/docs (developed by Manuel Jiménez Martín)
+    - http://sos2425-15.onrender/api/v1/ocupied-grand-stats/docs (developed by Fernando Lagares Luna)
+    - http://sos2425-15.onrender/api/v1/temperature-stats/docs (developed by Gonzalo Gavilán Turiño)
