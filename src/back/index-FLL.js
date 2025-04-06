@@ -48,7 +48,7 @@ database.insert(ocupied_grand_stats, (err, newDocs) => {
 
 function loadBackendFLL(app){
     
-    // APIs de DLC
+    // APIs de FLL
     app.get(BASE_API + "/ocupied-grand-stats/docs", (req, res) => {
         res.redirect("https://documenter.getpostman.com/view/42153958/2sAYkLncz8"); 
     });
@@ -221,7 +221,7 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
     });
 
     //PUT de un dato especifico
-    app.put(BASE_API + "/ocupied-grand-stats/:province", (req, res) => {
+    app.put(BASE_API + "/ocupied-grand-stats/:ine_code", (req, res) => {
         const paramIneCode = Number(req.params.ine_code);
         const updatedData = req.body;
 
