@@ -1,4 +1,4 @@
-const datosF = [
+const ocupied_grand_stats = [
     {year: "2021", province: "cadiz", ground: 177000, grass: 300000, wooded: 250000, non_agrarian_surface: 70000},
     {year: "2021", province: "almería", ground: 177590, grass: 363915, wooded: 257241, non_agrarian_surface: 78557},
     {year: "2021", province: "cordoba", ground: 728625, grass: 161589, wooded: 391269, non_agrarian_surface: 95577},
@@ -12,10 +12,9 @@ const datosF = [
 ];
 
 
-module.exports = datosF;
 
 
-function mediaTotalGround(datos) {
+/*function mediaTotalGround(datos) {
     let sumaGround = 0;
     let cantidad = 0;
 
@@ -27,7 +26,7 @@ function mediaTotalGround(datos) {
     return sumaGround / cantidad;
 }
 
-console.log(mediaTotalGround(datosF));
+console.log(mediaTotalGround(datosF));*/
 
 
-
+export{ocupied_grand_stats};

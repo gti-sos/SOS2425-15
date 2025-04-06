@@ -1,9 +1,12 @@
 import dataStore from "nedb";
+import path from "path";
+import fs from "fs";
+import { precipitation_stats } from "file:///C:/Users/majim/SOS2425-15/anteriores/index-MJM.js";
 
 const database = new dataStore();
 
 function loadInitialDataMJM(){
-    const precipitation_stats = [
+    let precipitation_stats = [
         { year: 2020, province: "Sevilla", annual_precipitation: 210.6, historical_average: 292.9, deviation: -82.4 },
         { year: 2020, province: "Cádiz", annual_precipitation: 578.6, historical_average: 722.9, deviation: -144.3 },
         { year: 2020, province: "Córdoba", annual_precipitation: 450.2, historical_average: 557.9, deviation: -107.7 },
@@ -75,9 +78,13 @@ function loadBackendMJM(app){
 
     // GET todos los datos con paginación
 app.get(BASE_API + "/precipitation-stats", (req, res) => {
-    let {year, province, annual_precipitation, historical_average, deviation} = req.query;
+    let {ine_code, year, province, annual_precipitation, historical_average, deviation, from, to, limit, offset} = req.query;
 
     let query = {};
+    
+    if (ine_code) {
+        query.ine_code = Number(ine_code);
+    }
 
     if (year) {
         query.year = Number(year);
@@ -112,13 +119,13 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
         q = q.limit(Number(limit));
     }
 
-    q.exec((err, sanctions) => {
+    q.exec((err, precipitation_stats) => {
         if (err) {
             return res.status(500).send("Error al acceder a la base de datos.");
         }
 
         // Eliminar _id de cada objeto
-        const sanitized = sanctions.map(({ _id, ...rest }) => rest);
+        const sanitized = precipitation_stats.map(({ _id, ...rest }) => rest);
 
         res.send(JSON.stringify(sanitized));
     });
@@ -127,16 +134,16 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
 
     //POST a todos los datos
     app.post(BASE_API + "/precipitation-stats", (req, res) => {
-        const {year, province, annual_precipitation, historical_average, deviation} = req.body;
+        const {ine_code, year, province, annual_precipitation, historical_average, deviation} = req.body;
         // Validar campos obligatorios
         if (
-            year === undefined || province === undefined || annual_precipitation === undefined ||
+            ine_code === undefined || year === undefined || province === undefined || annual_precipitation === undefined ||
             historical_average === undefined || deviation === undefined
         ) {
             return res.sendStatus(400); // Bad Request
         }
         // Comprobar si ya existe un registro con mismo ine_code (puedes añadir year si es clave compuesta)
-        database.findOne({ province: province }, (err, existingDoc) => {
+        database.findOne({ ine_code: ine_code }, (err, existingDoc) => {
             if (err) {
                 return res.status(500).send("Error al acceder a la base de datos.");
             }
@@ -168,18 +175,18 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
 
     //GET de un dato especifico
     app.get(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramProvince = req.params.ine_code;
+        const paramIneCode = Number(req.params.ine_code);
     
-        database.findOne({ province: paramProvince }, (err, sanction) => {
+        database.findOne({ ine_code: paramIneCode }, (err, precipitations) => {
             if (err) {
                 return res.status(500).send("Error al acceder a la base de datos.");
             }
-            if (!sanction) {
+            if (!precipitations) {
                 return res.sendStatus(404);
             }
             // Eliminar la propiedad _id antes de enviar
-        const { _id, ...sanctionWithoutId } = sanction;
-        res.status(200).json(sanctionWithoutId);
+        const { _id, ...precipitationsWithoutId } = precipitations;
+        res.status(200).json(precipitationsWithoutId);
         });
     });
 
@@ -189,7 +196,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
         if (err) {
             return res.status(500).send("Error al limpiar la base de datos.");
         }    
-        database.insert(sanctionsData, (err) => {
+        database.insert(precipitation_stats, (err) => {
             if (err) {
                 return res.status(500).send("Error al restaurar los datos iniciales.");
             }    
@@ -206,14 +213,14 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
     //PUT de un dato especifico
     app.put(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramProvince = req.params.ine_code;
+        const paramIneCode = Number(req.params.ine_code);
         const updatedData = req.body;
 
         // Verificar que el ine_code en el body coincida con el de la URL
-        if (updatedData.province !== paramProvince) {
+        if (updatedData.ine_code !== paramIneCode) {
             return res.sendStatus(400); // Bad Request
         }    
-        database.update({ province: paramProvince }, updatedData, {}, (err, numReplaced) => {
+        database.update({ ine_code: paramIneCode }, updatedData, {}, (err, numReplaced) => {
             if (err) {
                 return res.status(500).send("Error al actualizar el recurso.");
             }
@@ -228,10 +235,10 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
 
     //DELETE de un dato especifico
-    app.delete(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramProvince = req.params.ine_code;
+    app.delete(BASE_API + "/precipitation-stats/:ine_code", (req, res) => {
+        const paramIneCode = Number(req.params.ine_code);
     
-        database.remove({ province: paramProvince }, {}, (err, numRemoved) => {
+        database.remove({ ine_code: paramIneCode }, {}, (err, numRemoved) => {
             if (err) {
                 res.status(500).send("Error al eliminar el recurso.");
                 console.error(`ERROR: ${err}`)
@@ -299,4 +306,4 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
 
 
-export {loadBackendMJM,precipitation_stats,loadInitialDataMJM};
+export {loadBackendMJM, precipitation_stats, loadInitialDataMJM};

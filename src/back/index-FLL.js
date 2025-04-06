@@ -1,4 +1,5 @@
 import dataStore from "nedb";
+import { ocupied_grand_stats } from "file:///C:/Users/majim/SOS2425-15/anteriores/index-FLL.js";
 
 const database = new dataStore();
 
@@ -293,4 +294,4 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
 
 
 
-export {loadBackendFLL,ocupied_grand_stats,loadInitialDataFLL};
+export {loadBackendFLL,ocupied_grand_stats, loadInitialDataFLL};
