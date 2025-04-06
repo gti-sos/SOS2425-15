@@ -185,7 +185,7 @@ app.get(BASE_API + "/temperature-stats", (req, res) => {
     });
 
     //GET de un dato especifico
-    app.get(BASE_API + "/temperature-stats/:province", (req, res) => {
+    app.get(BASE_API + "/temperature-stats/:ine_code", (req, res) => {
         const paramIneCode = Number(req.params.ine_code);
     
         database.findOne({ ine_code: paramIneCode }, (err, temperatures) => {
