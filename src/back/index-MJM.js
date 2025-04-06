@@ -170,7 +170,7 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
     });
 
     //GET de un dato especifico
-    app.get(BASE_API + "/precipitation-stats/:province", (req, res) => {
+    app.get(BASE_API + "/precipitation-stats/:ine_code", (req, res) => {
         const paramIneCode = Number(req.params.ine_code);
     
         database.findOne({ ine_code: paramIneCode }, (err, precipitations) => {
@@ -208,7 +208,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
     });
 
     //PUT de un dato especifico
-    app.put(BASE_API + "/precipitation-stats/:province", (req, res) => {
+    app.put(BASE_API + "/precipitation-stats/:ine_code", (req, res) => {
         const paramIneCode = Number(req.params.ine_code);
         const updatedData = req.body;
 
