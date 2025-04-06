@@ -204,14 +204,14 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
     //PUT de un dato especifico
     app.put(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramId = Number(req.params.accident_id);
+        const paramProvince = req.params.province;
         const updatedData = req.body;
 
         // Verificar que el accident_id en el body coincida con el de la URL
-        if (updatedData.accident_id !== paramId) {
+        if (updatedData.province !== paramProvince) {
             return res.sendStatus(400); // Bad Request
         }    
-        database.update({ accident_id: paramId }, updatedData, {}, (err, numReplaced) => {
+        database.update({ province: paramProvince }, updatedData, {}, (err, numReplaced) => {
             if (err) {
                 return res.status(500).send("Error al actualizar el recurso.");
             }
@@ -226,10 +226,10 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
 
     //DELETE de un dato especifico
-    app.delete(BASE_API + "/precipitation-stats/:accident_id", (req, res) => {
-        const paramId = Number(req.params.accident_id);
+    app.delete(BASE_API + "/precipitation-stats/:province", (req, res) => {
+        const paramProvince = req.params.accident_id;
     
-        database.remove({ accident_id: paramId }, {}, (err, numRemoved) => {
+        database.remove({ province: paramProvince }, {}, (err, numRemoved) => {
             if (err) {
                 res.status(500).send("Error al eliminar el recurso.");
                 console.error(`ERROR: ${err}`)
