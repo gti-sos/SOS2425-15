@@ -37,7 +37,7 @@ database.insert(precipitation_stats, (err, newDocs) => {
     }
 })
 
-function loadBackendDLC(app){
+function loadBackendMJM(app){
     
     // APIs de DLC
     app.get(BASE_API + "/precipitation-stats/docs", (req, res) => {
