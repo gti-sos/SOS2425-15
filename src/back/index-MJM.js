@@ -3,7 +3,7 @@ import dataStore from "nedb";
 const database = new dataStore();
 
 function loadInitialDataMJM(){
-    let precipitation_stats = [
+    const precipitation_stats = [
         { year: 2020, province: "Sevilla", annual_precipitation: 210.6, historical_average: 292.9, deviation: -82.4 },
         { year: 2020, province: "Cádiz", annual_precipitation: 578.6, historical_average: 722.9, deviation: -144.3 },
         { year: 2020, province: "Córdoba", annual_precipitation: 450.2, historical_average: 557.9, deviation: -107.7 },
@@ -22,28 +22,29 @@ function loadInitialDataMJM(){
         { year: 2022, province: "Málaga", annual_precipitation: 580.4, historical_average: 628.4, deviation: -47.9 },
         { year: 2022, province: "Cádiz", annual_precipitation: 639.2, historical_average: 722.9, deviation: -83.7 },
         { year: 2022, province: "Córdoba", annual_precipitation: 441.2, historical_average: 557.9, deviation: -116.7 },
-        { year: 2022, province: "Granada", annual_precipitation: 372.7, historical_average: 430.5, deviation: -57.8 }
+        { year: 2022, province: "Granada", annual_precipitation: 372.7, historical_average: 430.5, deviation: -57.8 }    
     ];
+        
     
     return precipitation_stats
 }
 
 const BASE_API = "/api/v1"
 
-database.insert(VCH, (err, newDocs) => {
+database.insert(precipitation_stats, (err, newDocs) => {
     if (err) {
         return res.status(500).send("Error al insertar los datos.");
     }
 })
 
-export function loadBackendMJM(app){
+function loadBackendDLC(app){
     
-    // APIs de VCH
+    // APIs de DLC
     app.get(BASE_API + "/precipitation-stats/docs", (req, res) => {
-        res.redirect(""); 
+        res.redirect("https://documenter.getpostman.com/view/42153958/2sAYkLncz8"); 
     });
 
-    app.get(BASE_API + "/precipitation-stats/loadInitialData", (req, res) => {
+    app.get(BASE_API + "/precipitation-stats/loadInitialDataMJM", (req, res) => {
         database.count({}, (err, count) => {
             if (err) {
                 return res.status(500).send("Error al comprobar la base de datos.");
@@ -59,11 +60,11 @@ export function loadBackendMJM(app){
                     return res.status(500).send("Error al insertar los datos.");
                 }
 
-                database.find({}, (err, accidents) => {
+                database.find({}, (err, precipitations) => {
                     if (err) {
                         return res.status(500).send("Error al recuperar los datos.");
                     }
-                    res.send(JSON.stringify(accidents.map((x)=>{
+                    res.send(JSON.stringify(precipitations.map((x)=>{
                         delete x._id;
                         return x;
                     }),null,2));
@@ -87,13 +88,14 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
     if (annual_precipitation) {
         query.annual_precipitation = Number(annual_precipitation);
     }
+    
     if (historical_average) {
         query.historical_average = Number(historical_average);
     }
     if (deviation) {
         query.deviation = Number(deviation);
     }
-    
+
     if (from || to) {
         query.year = {};
         if (from) query.year.$gte = Number(from);
@@ -110,13 +112,13 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
         q = q.limit(Number(limit));
     }
 
-    q.exec((err, precipitations) => {
+    q.exec((err, sanctions) => {
         if (err) {
             return res.status(500).send("Error al acceder a la base de datos.");
         }
 
         // Eliminar _id de cada objeto
-        const sanitized = precipitations.map(({ _id, ...rest }) => rest);
+        const sanitized = sanctions.map(({ _id, ...rest }) => rest);
 
         res.send(JSON.stringify(sanitized));
     });
@@ -129,11 +131,11 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
         // Validar campos obligatorios
         if (
             year === undefined || province === undefined || annual_precipitation === undefined ||
-            historical_average === undefined || deviation === undefined 
+            historical_average === undefined || deviation === undefined
         ) {
             return res.sendStatus(400); // Bad Request
         }
-        // Comprobar si ya existe un registro de la misma provincia (puedes añadir year si es clave compuesta)
+        // Comprobar si ya existe un registro con mismo ine_code (puedes añadir year si es clave compuesta)
         database.findOne({ province: province }, (err, existingDoc) => {
             if (err) {
                 return res.status(500).send("Error al acceder a la base de datos.");
@@ -166,18 +168,18 @@ app.get(BASE_API + "/precipitation-stats", (req, res) => {
 
     //GET de un dato especifico
     app.get(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramProvince = req.params.province;
+        const paramProvince = req.params.ine_code;
     
-        database.findOne({ province: paramProvince }, (err, precipitations) => {
+        database.findOne({ province: paramProvince }, (err, sanction) => {
             if (err) {
                 return res.status(500).send("Error al acceder a la base de datos.");
             }
-            if (!precipitations) {
+            if (!sanction) {
                 return res.sendStatus(404);
             }
             // Eliminar la propiedad _id antes de enviar
-        const { _id, ...precipitationsWithoutId } = precipitations;
-        res.status(200).json(precipitationsWithoutId);
+        const { _id, ...sanctionWithoutId } = sanction;
+        res.status(200).json(sanctionWithoutId);
         });
     });
 
@@ -187,7 +189,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
         if (err) {
             return res.status(500).send("Error al limpiar la base de datos.");
         }    
-        database.insert(precipitation_stats, (err) => {
+        database.insert(sanctionsData, (err) => {
             if (err) {
                 return res.status(500).send("Error al restaurar los datos iniciales.");
             }    
@@ -204,10 +206,10 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
     //PUT de un dato especifico
     app.put(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramProvince = req.params.province;
+        const paramProvince = req.params.ine_code;
         const updatedData = req.body;
 
-        // Verificar que el accident_id en el body coincida con el de la URL
+        // Verificar que el ine_code en el body coincida con el de la URL
         if (updatedData.province !== paramProvince) {
             return res.sendStatus(400); // Bad Request
         }    
@@ -227,7 +229,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
     //DELETE de un dato especifico
     app.delete(BASE_API + "/precipitation-stats/:province", (req, res) => {
-        const paramProvince = req.params.accident_id;
+        const paramProvince = req.params.ine_code;
     
         database.remove({ province: paramProvince }, {}, (err, numRemoved) => {
             if (err) {
@@ -278,7 +280,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
             }
         );
     });
-    app.delete(BASE_API + "/precipitation-stats/:province/:year", (req, res) => {
+    app.delete(BASE_API + "/precipitation/:province/:year", (req, res) => {
         const year = Number(req.params.year);
         const province = req.params.province;
     
@@ -295,4 +297,6 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
     
 }
 
-export {VCH,loadInitialDataVCH};
+
+
+export {loadBackendMJM,precipitation_stats,loadInitialDataMJM};
