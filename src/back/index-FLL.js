@@ -243,6 +243,8 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
     });
 
 
+    
+
     //DELETE de un dato especifico
     app.delete(BASE_API + "/ocupied-grand-stats/:ine_code", (req, res) => {
         const paramIneCode = Number(req.params.ine_code);
