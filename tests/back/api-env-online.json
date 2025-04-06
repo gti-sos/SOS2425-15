@@ -1,0 +1,15 @@
+{
+	"id": "0da26457-a035-4a13-b720-941beedaf10c",
+	"name": "online",
+	"values": [
+		{
+			"key": "BASE_URL",
+			"value": "https://sos2425-15.onrender.com",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-04-06T09:41:37.542Z",
+	"_postman_exported_using": "Postman/11.39.5-250403-2338"
+}
