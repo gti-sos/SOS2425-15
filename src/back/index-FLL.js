@@ -33,7 +33,7 @@ const ocupied_grand_stats = [
 
 
 
-function loadInitialDataFLL(){
+function loadInitialData(){
         
     return ocupied_grand_stats
 }
@@ -53,7 +53,7 @@ function loadBackendFLL(app){
         res.redirect("https://documenter.getpostman.com/view/42153958/2sAYkLncz8"); 
     });
 
-    app.get(BASE_API + "/ocupied-grand-stats/loadInitialDataFLL", (req, res) => {
+    app.get(BASE_API + "/ocupied-grand-stats/loadInitialData", (req, res) => {
         database.count({}, (err, count) => {
             if (err) {
                 return res.status(500).send("Error al comprobar la base de datos.");
@@ -63,7 +63,7 @@ function loadBackendFLL(app){
                 return res.status(400).json({ message: "Ya tiene datos" });
             }
 
-            const initialData = loadInitialDataFLL();
+            const initialData = loadInitialData();
             database.insert(initialData, (err, newDocs) => {
                 if (err) {
                     return res.status(500).send("Error al insertar los datos.");
@@ -317,4 +317,4 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
 
 
 
-export {loadBackendFLL, ocupied_grand_stats, loadInitialDataFLL};
+export {loadBackendFLL, ocupied_grand_stats, loadInitialData};

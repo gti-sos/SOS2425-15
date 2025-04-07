@@ -11,18 +11,6 @@ const __dirname = path.dirname(__filename)
 const app = express();
 const PORT = process.env.PORT || 16079;
 
-
-
-//Exports de los index-XXX..
-//const {CalculateChanges,InitialData,ChangesData} = require("./src/js/index-JVF.js");
-//const {calculateDeceased,siniestralidadData,loadInitialDataMRC} = require("./src/js/index-MRC.js");
-
-
-
-//Datos de los CSV
-//let ownershipsChangesYear2023Stats = ChangesData;.
-//let siniestralidadData2023 = siniestralidadData;
-
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json())
