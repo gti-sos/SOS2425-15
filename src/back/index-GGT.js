@@ -223,7 +223,7 @@ app.post(BASE_API + "/temperature-stats/reset", (req, res) => {
     });
 
     //PUT de un dato especifico
-    app.put(BASE_API + "/temperature-stats/:province", (req, res) => {
+    app.put(BASE_API + "/temperature-stats/:ine_code", (req, res) => {
         const paramIneCode = Number(req.params.ine_code);
         const updatedData = req.body;
 
