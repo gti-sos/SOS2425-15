@@ -260,7 +260,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
             if (!docs || docs.length === 0) return res.sendStatus(404);
     
             const sanitized = docs.map(({ _id, ...rest }) => rest);
-            res.status(200).json(sanitized);
+            res.status(200).json(sanitized);//prueba
         });
     });
     app.put(BASE_API + "/precipitation-stats/:province/:year", (req, res) => {
