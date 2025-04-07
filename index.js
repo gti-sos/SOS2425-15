@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import {loadBackendMJM} from "./src/back/index-MJM.js";
 import {loadBackendFLL} from "./src/back/index-FLL.js";
-import { loadBackendGGT } from "./src/back/index-GGT.js";
+import {loadBackendGGT} from "./src/back/index-GGT.js";
 import { fileURLToPath } from 'url';
 
 
