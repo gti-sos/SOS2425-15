@@ -302,4 +302,4 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
 
 
-export {loadBackendMJM, precipitation_stats, loadInitialDataMJM};
+export {loadBackendMJM, precipitation_stats, loadInitialDataMJM}; //exportar
