@@ -310,7 +310,7 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
                 if (numRemoved === 0) return res.sendStatus(404);
                 res.status(200).json({ message: "Deleted successfully", removed: numRemoved });
             }
-        );
+        ); 
     });
     
 }
