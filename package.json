@@ -20,9 +20,10 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test-api-local": "npx newman run ./tests/back/Manuel-L06.postman_collection.json -e ./tests/back/api-env-local.json",
-    "test-api-online": "npx newman run ./tests/back/Manuel-L06.postman_collection.json -e ./tests/back/api-env-online.json",
-    "test-local": "start-server-and-test start http://localhost:16079 test-api-local" 
+    "test-api-local-Manuel": "npx newman run ./tests/back/Manuel-L06.postman_collection.json -e ./tests/back/api-env-local.json",
+    "test-api-online-Manuel": "npx newman run ./tests/back/Manuel-L06.postman_collection.json -e ./tests/back/api-env-online.json",
+    "test-local-Manuel": "start-server-and-test start http://localhost:16079 test-api-local-Manuel", 
+    "test-precipitation-stats": "npm run test-local-Manuel"
   },
   "repository": {
     "type": "git",

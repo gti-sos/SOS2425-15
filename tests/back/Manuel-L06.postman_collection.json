@@ -8,43 +8,6 @@
 	},
 	"item": [
 		{
-			"name": "Cargar todos los datos",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/precipitation-stats/loadInitialDataMJM",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"precipitation-stats",
-						"loadInitialDataMJM"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Cargar dato es específico",
 			"event": [
 				{
