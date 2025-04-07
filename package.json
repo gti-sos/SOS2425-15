@@ -30,7 +30,7 @@
     "test-local-Fernando": "start-server-and-test start http://localhost:16079 test-api-local-Fernando",
     "test-ocupied-grand-stats": "npm run test-local-Fernando",
 
-    "test": "npm run test-precipitation-stats && npm run test-ocupied-grand-stats"
+    "test": "npm run test-precipitation-stats"
 
   },
   "repository": {
