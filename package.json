@@ -30,8 +30,13 @@
     "test-local-Fernando": "start-server-and-test start http://localhost:16079 test-api-local-Fernando",
     "test-ocupied-grand-stats": "npm run test-local-Fernando",
 
-    "test": "npm run test-precipitation-stats && npm run test-ocupied-grand-stats"
+    "test-api-local-Gonzalo": "npx newman run ./tests/back/Gonzalo-L06.postman_collection.json -e ./tests/back/api-env-local.json",
+    "test-api-online-Gonzalo": "npx newman run ./tests/back/Gonzalo-L06.postman_collection.json -e ./tests/back/api-env-online.json",
+    "test-local-Gonzalo": "start-server-and-test start http://localhost:16079 test-api-local-Gonzalo",
+    "test-temperature-stats": "npm run test-local-Gonzalo",
 
+
+    "test": "npm run test-precipitation-stats && npm run test-ocupied-grand-stats && npm run test-temperature-stats"
   },
   "repository": {
     "type": "git",

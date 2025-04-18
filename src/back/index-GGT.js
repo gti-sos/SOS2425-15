@@ -55,7 +55,7 @@ function loadBackendGGT(app){
     
     // APIs de DLC
     app.get(BASE_API + "/temperature-stats/docs", (req, res) => {
-        res.redirect("https://documenter.getpostman.com/view/42153958/2sAYkLncz8"); 
+        res.redirect("https://documenter.getpostman.com/view/42360081/2sB2cVdgvs"); 
     });
 
     app.get(BASE_API + "/temperature-stats/loadInitialDataGGT", (req, res) => {

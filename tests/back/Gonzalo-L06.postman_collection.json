@@ -1,45 +1,27 @@
 {
 	"info": {
-		"_postman_id": "691c6d08-26e7-4a3d-8000-59289983e8df",
-		"name": "Fernando-L06",
+		"_postman_id": "5d402a92-fe75-45db-baf3-d191634f083c",
+		"name": "Gonzalo-L06",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "42360151",
-		"_collection_link": "https://bold-water-692884.postman.co/workspace/SOS2425-15~ac6f71c4-2c87-43f7-9611-f9979102d069/collection/42360151-691c6d08-26e7-4a3d-8000-59289983e8df?action=share&source=collection_link&creator=42360151"
+		"_exporter_id": "42360081",
+		"_collection_link": "https://bold-water-692884.postman.co/workspace/SOS2425-15~ac6f71c4-2c87-43f7-9611-f9979102d069/collection/42360081-5d402a92-fe75-45db-baf3-d191634f083c?action=share&source=collection_link&creator=42360081"
 	},
 	"item": [
 		{
 			"name": "Cargar todos los datos",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status is 200\", function () {\r",
-							"     pm.response.to.have.status(200);\r",
-							"});"
-							
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
 			"request": {
-				"auth": {
-					"type": "noauth"
-				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialDataFLL",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/loadInitialDataGGT",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
-						"loadInitialDataFLL"
+						"temperature-stats",
+						"loadInitialDataGGT"
 					]
 				}
 			},
@@ -47,20 +29,6 @@
 		},
 		{
 			"name": "Cargar dato especifico",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -68,14 +36,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/1",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/1",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						"1"
 					]
 				}
@@ -105,19 +73,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats?province=cadiz",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats?province=sevilla",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats"
+						"temperature-stats"
 					],
 					"query": [
 						{
 							"key": "province",
-							"value": "cadiz"
+							"value": "sevilla"
 						}
 					]
 				}
@@ -147,19 +115,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats?year=2021",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats?year=2022",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats"
+						"temperature-stats"
 					],
 					"query": [
 						{
 							"key": "year",
-							"value": "2021"
+							"value": "2022"
 						}
 					]
 				}
@@ -189,23 +157,23 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats?from=2021&to=2022",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats?from=2022&to=2023",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats"
+						"temperature-stats"
 					],
 					"query": [
 						{
 							"key": "from",
-							"value": "2021"
+							"value": "2022"
 						},
 						{
 							"key": "to",
-							"value": "2022"
+							"value": "2023"
 						}
 					]
 				}
@@ -213,7 +181,7 @@
 			"response": []
 		},
 		{
-			"name": "Post a todos los datos",
+			"name": "Post a todos los datos 50",
 			"event": [
 				{
 					"listen": "test",
@@ -236,7 +204,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"ine_code\": 50,\r\n\"year\": 2025,\r\n\"province\": \"teruel\",\r\n\"ground\": 120,\r\n\"grass\": 122,\r\n\"wooded\": 89,\r\n\"non_agrarian_surface\": 78\r\n}",
+					"raw": " {\r\n        \"ine_code\": 200,\r\n        \"year\": 2026,\r\n        \"province\": \"Barcelona\",\r\n        \"average_temperature\": 14.3,\r\n        \"minimum_average\": 22.6,\r\n        \"maximum_average\": 26.6\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -244,14 +212,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						""
 					]
 				}
@@ -259,7 +227,7 @@
 			"response": []
 		},
 		{
-			"name": "Fallo POST por conflicto = igual",
+			"name": "Post conflicto",
 			"event": [
 				{
 					"listen": "test",
@@ -282,7 +250,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"ine_code\":1,\"year\":2021,\"province\":\"cadiz\",\"ground\":177000,\"grass\":300000,\"wooded\":250000,\"non_agrarian_surface\":70000}",
+					"raw": " {\r\n        \"ine_code\": 200,\r\n        \"year\": 2026,\r\n        \"province\": \"Barcelona\",\r\n        \"average_temperature\": 14.3,\r\n        \"minimum_average\": 22.6,\r\n        \"maximum_average\": 26.6\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -290,14 +258,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						""
 					]
 				}
@@ -305,7 +273,7 @@
 			"response": []
 		},
 		{
-			"name": "Fallo POST por falta campos",
+			"name": "Fallo POST por falta de campos",
 			"event": [
 				{
 					"listen": "test",
@@ -328,7 +296,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"ine_code\":1,\"year\":2021,\"province\":\"cadiz\",\"ground\":177000,\"grass\":300000,\"wooded\":250000}",
+					"raw": "{\r\n        \"ine_code\": 52,\r\n        \"year\": 2027,\r\n        \"province\": \"Mérida\"\r\n\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -336,14 +304,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						""
 					]
 				}
@@ -357,7 +325,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-		
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -371,27 +341,30 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats"
+						"temperature-stats",
+						""
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Cargar todos los datos Copy",
+			"name": "Cargar datos de nuevo",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -405,22 +378,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialDataFLL",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/loadInitialDataGGT",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
-						"loadInitialDataFLL"
+						"temperature-stats",
+						"loadInitialDataGGT"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Put a dato especifico",
+			"name": "Put a dato específico",
 			"event": [
 				{
 					"listen": "test",
@@ -443,7 +416,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"ine_code\": 7,\r\n\"year\": 2020,\r\n\"province\": \"teruel\",\r\n\"ground\": 806241,\r\n\"grass\": 137214,\r\n\"wooded\": 313296,\r\n\"non_agrarian_surface\": 146857\r\n}",
+					"raw": "  {\r\n        \"ine_code\": 1,\r\n        \"year\": 2020,\r\n        \"province\": \"Almería\",\r\n        \"average_temperature\": 17.2,\r\n        \"minimum_average\": 12.2,\r\n        \"maximum_average\": 22.9\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -451,22 +424,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/7",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/1",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
-						"7"
+						"temperature-stats",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete dato especifico",
+			"name": "Delete dato específico",
 			"event": [
 				{
 					"listen": "test",
@@ -488,14 +461,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/3",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/3",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						"3"
 					]
 				}
@@ -503,7 +476,7 @@
 			"response": []
 		},
 		{
-			"name": "Fallo de PUT a todos los datos",
+			"name": "Fallo PUT todos los datos",
 			"event": [
 				{
 					"listen": "test",
@@ -525,14 +498,15 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats"
+						"temperature-stats",
+						""
 					]
 				}
 			},
@@ -561,22 +535,22 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/41906",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/1",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
-						"41906"
+						"temperature-stats",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Fallo PUT distinto id recurso",
+			"name": "Fallo PUT id distinto",
 			"event": [
 				{
 					"listen": "test",
@@ -599,7 +573,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"ine_code\": 7,\r\n\"year\": 2020,\r\n\"province\": \"sevilla\",\r\n\"ground\": 806241,\r\n\"grass\": 137214,\r\n\"wooded\": 313296,\r\n\"non_agrarian_surface\": 146857\r\n}",
+					"raw": "{\r\n        \"ine_code\": 6,\r\n        \"year\": 2020,\r\n        \"province\": \"Jaén\",\r\n        \"average_temperature\": 16.3,\r\n        \"minimum_average\": 10.3,\r\n        \"maximum_average\": 22.9\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -607,22 +581,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/200",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/3",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
-						"200"
+						"temperature-stats",
+						"3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Fallo PUT recurso inexistente",
+			"name": "Fallo PUT dato inexistente",
 			"event": [
 				{
 					"listen": "test",
@@ -645,7 +619,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"ine_code\": 3,\r\n\"year\": 2021,\r\n\"province\": \"cordoba\",\r\n\"ground\": 728625,\r\n\"grass\": 161589,\r\n\"wooded\": 391269,\r\n\"non_agrarian_surface\": 95577\r\n}",
+					"raw": "{\r\n    \"ine_code\": 3,\r\n    \"year\": 2020,\r\n    \"province\": \"Córdoba\",\r\n    \"average_temperature\": 17.3,\r\n    \"minimum_average\": 11,\r\n    \"maximum_average\": 23.9\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -653,14 +627,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/3",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/3",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						"3"
 					]
 				}
@@ -668,7 +642,7 @@
 			"response": []
 		},
 		{
-			"name": "Restaurar datos principio",
+			"name": "Resetear datos como al principio",
 			"event": [
 				{
 					"listen": "test",
@@ -690,14 +664,14 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/reset",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/reset",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats",
+						"temperature-stats",
 						"reset"
 					]
 				}

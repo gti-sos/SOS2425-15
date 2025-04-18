@@ -38,7 +38,7 @@ database.insert(precipitation_stats, (err, newDocs) => {
 
 function loadBackendMJM(app){
     
-    // APIs de DLC
+   
     app.get(BASE_API + "/precipitation-stats/docs", (req, res) => {
         res.redirect("https://documenter.getpostman.com/view/42117543/2sB2cUCPCM"); 
     });
