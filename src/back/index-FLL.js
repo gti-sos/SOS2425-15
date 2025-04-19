@@ -46,7 +46,7 @@ database.insert(ocupied_grand_stats, (err, newDocs) => {
     }
 })
 
-function loadBackend(app){
+function loadBackendFLL(app){
     
     // APIs de 
     app.get(BASE_API + "/ocupied-grand-stats/docs", (req, res) => {
@@ -317,4 +317,4 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
 
 
 
-export {loadBackend, ocupied_grand_stats, loadInitialData};
+export {loadBackendFLL, ocupied_grand_stats, loadInitialData};

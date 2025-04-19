@@ -23,7 +23,7 @@ let precipitation_stats = [
     { ine_code: 18, year: 2022, province: "Granada", annual_precipitation: 372.7, historical_average: 430.5, deviation: -57.8 }    
 ];
 
-function loadInitialDataMJM(){
+function loadInitialData(){
         
     return precipitation_stats
 }
@@ -43,7 +43,7 @@ function loadBackendMJM(app){
         res.redirect("https://documenter.getpostman.com/view/42117543/2sB2cUCPCM"); 
     });
 
-    app.get(BASE_API + "/precipitation-stats/loadInitialDataMJM", (req, res) => {
+    app.get(BASE_API + "/precipitation-stats/loadInitialData", (req, res) => {
         database.count({}, (err, count) => {
             if (err) {
                 return res.status(500).send("Error al comprobar la base de datos.");
@@ -53,7 +53,7 @@ function loadBackendMJM(app){
                 return res.status(400).json({ message: "Ya tiene datos" });
             }
 
-            const initialData = loadInitialDataMJM();
+            const initialData = loadInitialData();
             database.insert(initialData, (err, newDocs) => {
                 if (err) {
                     return res.status(500).send("Error al insertar los datos.");
@@ -283,7 +283,7 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
             }
         );
     });
-    app.delete(BASE_API + "/precipitation/:province/:year", (req, res) => {
+    app.delete(BASE_API + "/precipitation-stats/:province/:year", (req, res) => {
         const year = Number(req.params.year);
         const province = req.params.province;
     
@@ -302,4 +302,4 @@ app.post(BASE_API + "/precipitation-stats/reset", (req, res) => {
 
 
 
-export {loadBackendMJM, precipitation_stats, loadInitialDataMJM}; //exportar
+export {loadBackendMJM, precipitation_stats, loadInitialData}; //exportar

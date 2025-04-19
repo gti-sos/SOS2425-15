@@ -39,7 +39,7 @@ let temperature_stats = [
     {ine_code: 32, year: 2023, province: "Sevilla", average_temperature: 18.8, minimum_average: 12.1, maximum_average: 25.9}
 ];
 
-function loadInitialDataGGT(){
+function loadInitialData(){
     return temperature_stats
 }
 
@@ -58,7 +58,7 @@ function loadBackendGGT(app){
         res.redirect("https://documenter.getpostman.com/view/42360081/2sB2cVdgvs"); 
     });
 
-    app.get(BASE_API + "/temperature-stats/loadInitialDataGGT", (req, res) => {
+    app.get(BASE_API + "/temperature-stats/loadInitialData", (req, res) => {
         database.count({}, (err, count) => {
             if (err) {
                 return res.status(500).send("Error al comprobar la base de datos.");
@@ -68,7 +68,7 @@ function loadBackendGGT(app){
                 return res.status(400).json({ message: "Ya tiene datos" });
             }
 
-            const initialData = loadInitialDataGGT();
+            const initialData = loadInitialData();
             database.insert(initialData, (err, newDocs) => {
                 if (err) {
                     return res.status(500).send("Error al insertar los datos.");
@@ -317,4 +317,4 @@ app.post(BASE_API + "/temperature-stats/reset", (req, res) => {
 
 
 
-export {loadBackendGGT, temperature_stats, loadInitialDataGGT};
+export {loadBackendGGT, temperature_stats, loadInitialData};
