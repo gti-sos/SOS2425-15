@@ -2,8 +2,9 @@
     //@ts-nocheck
     import {onMount} from "svelte";
     import {dev} from "$app/environment"
-    import { Table, Button } from 'sveltestrap';
+    import { Table,Button } from '@sveltestrap/sveltestrap';
 
+    
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/ocupied-grand-stats/";
     if(dev){
@@ -200,7 +201,8 @@
         provinces = JSON.parse(savedProvinces);
         autonomousCommunities = JSON.parse(savedCommunities);
     } 
-        */
+    */
+   
     if (savedProvinces) {
         provinces = JSON.parse(savedProvinces);
     } else {

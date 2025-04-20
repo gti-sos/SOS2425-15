@@ -5,11 +5,11 @@
     //@ts-nocheck
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
-    import { Table, Button } from 'sveltestrap';
+    import { Table,Button } from '@sveltestrap/sveltestrap';
     import { page } from "$app/stores";
     import { get } from "svelte/store";
     import { goto } from '$app/navigation';
-	//import { title } from "process";
+	import { title } from "process";
 
 
     let DEVEL_HOST = "http://localhost:16079";
