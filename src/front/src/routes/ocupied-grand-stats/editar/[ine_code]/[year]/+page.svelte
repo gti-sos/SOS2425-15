@@ -5,7 +5,7 @@
     //@ts-nocheck
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
-    import { Table, Button } from "@sveltestrap/sveltestrap";
+    import { Table, Button } from 'sveltestrap';
     import { page } from "$app/stores";
     import { get } from "svelte/store";
     import { goto } from '$app/navigation';
