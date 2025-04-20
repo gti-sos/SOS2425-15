@@ -4,10 +4,10 @@ import { test, expect } from '@playwright/test';
 //Pruebas FLL
 
 test('has title', async ({ page }) => {
-  await page.goto('localhost:16079/ocupied-grand-stats');
+  await page.goto('http://localhost:16079/ocupied-grand-stats/');
 
   // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Sanctions Manager/);
+  await expect(page).toHaveTitle(/Ocupieds  Manager/);
 });
 
 
@@ -21,7 +21,7 @@ test('create and delete ocupied', async ({ page }) => {
   const testWooded = "2";
   const testNon_agrarian_surface = "3";
 
-  await page.goto('localhost:16070/ocupied-grand-stats/');
+  await page.goto('http://localhost:16079/ocupied-grand-stats/');
 
   await page.getByRole('textbox').nth(6).fill(testIneCode);
   await page.getByRole('textbox').nth(7).fill(testProvince);
@@ -29,7 +29,7 @@ test('create and delete ocupied', async ({ page }) => {
   await page.getByRole('textbox').nth(9).fill(testYear);
   await page.getByRole('textbox').nth(10).fill(testGrass);
   await page.getByRole('textbox').nth(11).fill(testWooded);
-  await page.getByRole('textbox').nth(11).fill(testNon_agrarian_surface);
+  await page.getByRole('textbox').nth(12).fill(testNon_agrarian_surface);
 
   
   await page.getByRole('button', { name: 'Crear registro' }).click();

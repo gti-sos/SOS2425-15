@@ -51,7 +51,7 @@
         resultStatus = result = "";
         try {
             const res = await fetch(API+ine_code+"/"+year, {method:"DELETE"});  
-            const status = await res.status;            
+            const status = res.status;            
             resultStatus=status;
             if (status==200){
                 console.log(`Dato ine_code:${ine_code}, año:${year} borrado con éxito`)
@@ -70,7 +70,7 @@
     async function deleteAllOcupieds() {
         try {
             const res = await fetch(API, {method:"DELETE"});  
-            const status = await res.status;            
+            const status = res.status;            
             resultStatus=status;
             if (status==200){
                 console.log("Todos los datos se han borrado")
@@ -107,7 +107,7 @@
             })
             });        
             
-            const status = await res.status;
+            const status = res.status;
             resultStatus=status
             console.log(newOcupiedGrass)
             if (status==201){
@@ -147,7 +147,7 @@
     async function loadInitialData() {
         try {
             const res = await fetch(API + "loadInitialData");
-            const status = await res.status;
+            const status = res.status;
             resultStatus=status
             if (status==200) {
                 const data = await res.json();
@@ -184,7 +184,7 @@
             const data = await res.json();
             OcupiedsData = data // actualizar el array con los resultados
         } catch (error) {
-            console.error("Error al buscar sanciones:", error);
+            console.error("Error al buscar ocupaciones:", error);
         }
     }
 
@@ -221,7 +221,7 @@
 
 </script>
 
-<h3>Buscar groun</h3>
+<h3>Buscar ground</h3>
 <div>
     <input placeholder="INE code" bind:value={searchIneCode} />
     <select bind:value={searchProvince} disabled={searchGround}>

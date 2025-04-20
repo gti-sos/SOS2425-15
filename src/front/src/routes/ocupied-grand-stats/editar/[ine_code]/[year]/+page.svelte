@@ -9,7 +9,7 @@
     import { page } from "$app/stores";
     import { get } from "svelte/store";
     import { goto } from '$app/navigation';
-	import { title } from "process";
+	//import { title } from "process";
 
 
     let DEVEL_HOST = "http://localhost:16079";
@@ -70,7 +70,7 @@
                 body: JSON.stringify(ocupied)
             });
 
-            status = await res.status
+            let status = await res.status
             if (status ==200) {
                 console.log("Ocupied updated successfully");
                 console.log("Dato actualizado correctamente")
@@ -88,10 +88,10 @@
             ine_code: Number(editIneCode),
             province: editProvince,
             ground: Number(editGround),
-            year: editYear,
+            year: Number(editYear),
             grass: Number(editGrass),
             wooded: Number(editWooded),
-            non_agrarian_surface: Number(non_agrarian_surface)
+            non_agrarian_surface: Number(editNon_agrarian_surface)
         };
 
         updateOcupied(updatedOcupied);
