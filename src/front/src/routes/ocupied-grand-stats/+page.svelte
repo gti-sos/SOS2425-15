@@ -18,13 +18,17 @@
     let newOcupiedYear;
     let newOcupiedGrass;
     let newOcupiedWooded;
+    let newOcupiedNon_agrarian_surface;
+
 
     let provinces = [];
-    let autonomousCommunities = [];
 
     let searchIneCode = "";
     let searchProvince = "";
     let searchGround = "";
+    let searchGrass = "";
+    let searchWooded = "";
+    let searchNon_agrarian_surface = "";
     let searchYear = "";
     let searchFrom = "";
     let searchTo = "";
@@ -95,10 +99,11 @@
                 body: JSON.stringify({
                     "ine_code": toValidNumber(Number(newOcupiedIneCode)),
                     "province": newOcupiedProvince?.trim()|| undefined,
-                    "autonomous_community": newOcupiedGround?.trim() || undefined,
+                    "ground": toValidNumber(Number(newOcupiedGround)),
                     "year": toValidNumber(Number(newOcupiedYear)),
-                    "total_Ocupieds_with_points": toValidNumber(Number(newOcupiedGrass)),
-                    "total_points_deducted": toValidNumber(Number(newOcupiedWooded))
+                    "grass": toValidNumber(Number(newOcupiedGrass)),
+                    "wooded": toValidNumber(Number(newOcupiedWooded)),
+                    "non_agrarian_surface": toValidNumber(Number(newOcupiedNon_agrarian_surface))
             })
             });        
             
@@ -114,9 +119,13 @@
                 newOcupiedYear = "";
                 newOcupiedGrass = "";
                 newOcupiedWooded = "";
+                newOcupiedNon_agrarian_surface = "";
                 searchIneCode = "";
                 searchProvince = "";
                 searchGround = "";
+                searchGrass = "";
+                searchWooded = "";
+                searchNon_agrarian_surface = "";
                 searchYear = "";
                 searchFrom = "";
                 searchTo = "";
@@ -161,7 +170,7 @@
             console.log(searchGround);
         if (searchIneCode) params.push(`ine_code=${searchIneCode}`);
         if (searchProvince && !searchGround)params.push(`province=${encodeURIComponent(searchProvince)}`);
-        if (searchGround && !searchProvince)params.push(`autonomous_community=${encodeURIComponent(searchGround)}`);
+        if (searchGround && !searchProvince)params.push(`ground=${encodeURIComponent(searchGround)}`);
         if (searchYear) params.push(`year=${searchYear}`);
         if (searchFrom) params.push(`from=${searchFrom}`);
         if (searchTo) params.push(`to=${searchTo}`);
@@ -183,26 +192,33 @@
         getOcupieds();
         // Intenta cargar desde localStorage
     const savedProvinces = localStorage.getItem('provinces');
-    const savedCommunities = localStorage.getItem('autonomousCommunities');
 
+    //const savedCommunities = localStorage.getItem('autonomousCommunities');
+
+    /*
     if (savedProvinces && savedCommunities) {
         provinces = JSON.parse(savedProvinces);
         autonomousCommunities = JSON.parse(savedCommunities);
+    } 
+        */
+    if (savedProvinces) {
+        provinces = JSON.parse(savedProvinces);
     } else {
         try {
             const res = await fetch(`${API}`);
             const data = await res.json();
 
             provinces = Array.from(new Set(data.map(d => d.province).filter(Boolean))).sort();
-            autonomousCommunities = Array.from(new Set(data.map(d => d.autonomous_community).filter(Boolean))).sort();
+            //autonomousCommunities = Array.from(new Set(data.map(d => d.ground).filter(Boolean))).sort();
             // Guardar en localStorage
             localStorage.setItem('provinces', JSON.stringify(provinces));
-            localStorage.setItem('autonomousCommunities', JSON.stringify(autonomousCommunities));
+            //localStorage.setItem('autonomousCommunities', JSON.stringify(autonomousCommunities));
         } catch (error) {
-            console.error("Error al cargar provincias y comunidades:", error);
+            console.error("Error al cargar provincias:", error);
         }
     }
     })
+
 </script>
 
 <h3>Buscar groun</h3>
@@ -214,12 +230,14 @@
             <option value={province}>{province}</option>
         {/each}
     </select>
+    <!-- 
     <select bind:value={searchGround} disabled={searchProvince}>
         <option value="">-- Comunidad Autónoma --</option>
         {#each autonomousCommunities as community}
             <option value={community}>{community}</option>
         {/each}
     </select>
+    -->
     <input placeholder="Año" bind:value={searchYear} />
     <input placeholder="Desde (año)" bind:value={searchFrom} />
     <input placeholder="Hasta (año)" bind:value={searchTo} />
@@ -241,10 +259,11 @@
         <tr>
             <th>ine_code</th>
             <th>province</th>
-            <th>autonomous_community</th>
+            <th>ground</th>
             <th>year</th>
-            <th>total_Ocupieds_with_points</th>
-            <th>total_points_deducted</th>
+            <th>grass</th>
+            <th>wooded</th>
+            <th>non_agrarian_surface</th>
         </tr>
     </thead>
     <tbody>
@@ -267,6 +286,9 @@
             <td> 
                 <input bind:value={newOcupiedWooded}>
             </td>
+            <td> 
+                <input bind:value={newOcupiedNon_agrarian_surface}>
+            </td>
             
             <td>
                 <Button color="primary" on:click={createOcupied} >Crear registro</Button>
@@ -282,16 +304,19 @@
                 {Ocupied.province}
             </td>
             <td>
-                {Ocupied.autonomous_community}
+                {Ocupied.ground}
             </td>
             <td>
                 {Ocupied.year}
             </td>
             <td>
-                {Ocupied.total_Ocupieds_with_points}
+                {Ocupied.grass}
             </td>
             <td>
-                {Ocupied.total_points_deducted}
+                {Ocupied.wooded}
+            </td>
+            <td>
+                {Ocupied.non_agrarian_surface}
             </td>
             <td>
                 <Button color="danger" on:click={()=>{deleteOcupied(Ocupied.ine_code,Ocupied.year)}} >Borrar</Button>

@@ -12,6 +12,8 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
+      - name: Run server for e2e tests
+        run: npm start &
       - name: Deploy to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
         with: 

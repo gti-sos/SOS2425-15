@@ -1,0 +1,81 @@
+// @ts-check
+import { test, expect } from '@playwright/test';
+
+//Pruebas FLL
+
+test('has title', async ({ page }) => {
+  await page.goto('localhost:16079/ocupied-grand-stats');
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Sanctions Manager/);
+});
+
+
+
+test('create and delete ocupied', async ({ page }) => {
+  const testIneCode = "2";
+  const testProvince = "Sevilla";
+  const testGround = "Andalucía";
+  const testYear = "2024";
+  const testGrass = "1";
+  const testWooded = "2";
+  const testNon_agrarian_surface = "3";
+
+  await page.goto('localhost:16070/ocupied-grand-stats/');
+
+  await page.getByRole('textbox').nth(6).fill(testIneCode);
+  await page.getByRole('textbox').nth(7).fill(testProvince);
+  await page.getByRole('textbox').nth(8).fill(testGround);
+  await page.getByRole('textbox').nth(9).fill(testYear);
+  await page.getByRole('textbox').nth(10).fill(testGrass);
+  await page.getByRole('textbox').nth(11).fill(testWooded);
+  await page.getByRole('textbox').nth(11).fill(testNon_agrarian_surface);
+
+  
+  await page.getByRole('button', { name: 'Crear registro' }).click();
+
+  
+  const fullRowText = `${testIneCode} ${testProvince} ${testGround} ${testYear} ${testGrass} ${testWooded} ${testNon_agrarian_surface}`;
+  const ocupiedRow = page.getByRole('row', { name: fullRowText });
+
+  await expect(ocupiedRow).toContainText(testProvince);
+  await expect(ocupiedRow).toContainText(testGround);
+  await expect(ocupiedRow).toContainText(testYear);
+  await expect(ocupiedRow).toContainText(testGrass);
+  await expect(ocupiedRow).toContainText(testWooded);
+  await expect(ocupiedRow).toContainText(testNon_agrarian_surface);
+
+
+  await ocupiedRow.getByRole('button', { name: 'Borrar' }).click();
+
+  await expect(page.getByRole('row', { name: fullRowText })).toHaveCount(0);
+});
+
+
+test('edit a ocupied record', async ({ page }) => {
+  await page.goto('http://localhost:16079/ocupied-grand-stats/');
+
+  // Limpiar y cargar datos de prueba
+  await page.getByRole('button', { name: 'Borrar datos' }).click();
+  await page.getByRole('button', { name: 'Datos de prueba' }).click();
+
+  // Hacer clic en el botón Editar del primer registro
+  await page.getByRole('button', { name: 'Editar' }).nth(0).click();
+
+  await expect(page).toHaveTitle(/Edit Ocupied Info/);
+
+  // Seleccionamos los inputs por su orden en el DOM
+  const inputs = page.locator('input');
+
+  // Cambiamos el campo 'wooded' (sexto input)
+  await inputs.nth(5).fill('999');
+
+  // Clic en el botón "Actualizar"
+  await page.getByRole('button', { name: 'Actualizar' }).click();
+
+  // Verificamos que vuelve a la página principal
+  await expect(page).toHaveURL(/ocupied-grand-stats/);
+
+  // Comprobamos que el cambio se refleja (opcionalmente podrías buscar por texto en la tabla)
+  await expect(page.locator('table')).toContainText('999');
+});
