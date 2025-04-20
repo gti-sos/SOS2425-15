@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "core-util-is": "^1.0.3",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "inherits": "^2.0.4",
     "isarray": "^1.0.0",
@@ -24,21 +25,16 @@
     "test-api-online-Manuel": "npx newman run ./tests/back/Manuel-L06.postman_collection.json -e ./tests/back/api-env-online.json",
     "test-local-Manuel": "start-server-and-test start http://localhost:16079 test-api-local-Manuel",
     "test-precipitation-stats": "npm run test-local-Manuel",
-
     "test-api-local-Fernando": "npx newman run ./tests/back/FLL-L06.postman_collection.json -e ./tests/back/api-env-local.json",
     "test-api-online-Fernando": "npx newman run ./tests/back/FLL-L06.postman_collection.json -e ./tests/back/api-env-online.json",
     "test-local-Fernando": "start-server-and-test start http://localhost:16079 test-api-local-Fernando",
     "test-ocupied-grand-stats": "npm run test-local-Fernando",
-
     "test-api-local-Gonzalo": "npx newman run ./tests/back/Gonzalo-L06.postman_collection.json -e ./tests/back/api-env-local.json",
     "test-api-online-Gonzalo": "npx newman run ./tests/back/Gonzalo-L06.postman_collection.json -e ./tests/back/api-env-online.json",
     "test-local-Gonzalo": "start-server-and-test start http://localhost:16079 test-api-local-Gonzalo",
     "test-temperature-stats": "npm run test-local-Gonzalo",
-
-
     "test": "npm run test-precipitation-stats && npm run test-ocupied-grand-stats && npm run test-temperature-stats",
     "build": "cd src/front; npm install; npm run build"
-
   },
   "repository": {
     "type": "git",

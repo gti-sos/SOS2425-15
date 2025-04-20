@@ -1,5 +1,7 @@
 import express from "express";
 import path from "path";
+import cors from "cors";
+
 import {loadBackendMJM} from "./src/back/index-MJM.js";
 import {loadBackendFLL} from "./src/back/index-FLL.js";
 import {loadBackendGGT} from "./src/back/index-GGT.js";
@@ -14,7 +16,9 @@ const PORT = process.env.PORT || 16079;
 
 // Servir archivos estáticos desde la carpeta "public"
 //app.use(express.static(path.join(__dirname, "/public")));
-app.use(express.json())
+app.use(express.json());
+
+app.use(cors());
 
 // Ruta para servir "about.html" en "/about"
 app.get("/about", (req, res) => {
