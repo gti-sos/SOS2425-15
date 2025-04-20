@@ -2,7 +2,7 @@
     //@ts-nocheck
     import {onMount} from "svelte";
     import {dev} from "$app/environment"
-    import { Table,Button } from '@sveltestrap/sveltestrap';
+    import { Table,Button } from "sveltestrap";
 
     
     let DEVEL_HOST = "http://localhost:16079";
@@ -202,7 +202,7 @@
         autonomousCommunities = JSON.parse(savedCommunities);
     } 
     */
-   
+
     if (savedProvinces) {
         provinces = JSON.parse(savedProvinces);
     } else {
