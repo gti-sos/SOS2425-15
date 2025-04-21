@@ -37,7 +37,7 @@
         let year = $page.params.year;
 
         try {
-            const res = await fetch(`${API}${ineCode}/${year}`, { method: "GET" });
+            const res = await fetch(`${API}${ineCode}`, { method: "GET" });
             const data = await res.json();
 
             ocupiedData = [data]; // aseguramos que sea array
@@ -115,10 +115,10 @@
     </thead>
     <tbody>
         <tr>
-            <td><input bind:value={editIneCode}></td>
+            <td><input bind:value={editIneCode} disabled></td>
             <td><input bind:value={editProvince}></td>
             <td><input bind:value={editGround}></td>
-            <td><input bind:value={editYear}></td>
+            <td><input bind:value={editYear} disabled></td>
             <td><input bind:value={editGrass}></td>
             <td><input bind:value={editWooded}></td>
             <td><input bind:value={editNon_agrarian_surface}></td>
