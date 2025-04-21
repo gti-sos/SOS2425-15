@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "@sveltejs/adapter-node": "^5.2.12",
+    "@sveltestrap/sveltestrap": "^7.1.0",
     "bootstrap": "^5.3.5",
     "core-util-is": "^1.0.3",
     "cors": "^2.8.5",
