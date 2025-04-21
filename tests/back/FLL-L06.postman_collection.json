@@ -31,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialDataFLL",
+					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialData",
 					"host": [
 						"{{BASE_URL}}"
 					],
@@ -39,7 +39,7 @@
 						"api",
 						"v1",
 						"ocupied-grand-stats",
-						"loadInitialDataFLL"
+						"loadInitialData"
 					]
 				}
 			},
