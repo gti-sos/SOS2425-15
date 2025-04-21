@@ -40,7 +40,7 @@
         let year = $page.params.year;
 
         try {
-            const res = await fetch(`${API}${ineCode}/${year}`, { method: "GET" });
+            const res = await fetch(`${API}${ineCode}`, { method: "GET" });
             if (res.ok) {
                 const data = await res.json();
                 precipitation_stats = [data]; // aseguramos que sea array
@@ -125,8 +125,8 @@
     </thead>
     <tbody>
         <tr>
-            <td><input bind:value={editIneCode}></td>
-            <td><input bind:value={editYear}></td>
+            <td><input bind:value={editIneCode} disabled></td>
+            <td><input bind:value={editYear} disabled></td>
             <td><input bind:value={editProvince}></td>
             <td><input bind:value={editAnnualPrecipitation}></td>
             <td><input bind:value={editHistoricalAverage}></td>
