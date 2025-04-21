@@ -2,7 +2,7 @@
     //@ts-nocheck
     import {onMount} from "svelte";
     import {dev} from "$app/environment"
-    import { Table, Button } from 'sveltestrap';
+    import { Table, Button } from '@sveltestrap/sveltestrap';
 
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/precipitation-stats/";
@@ -45,20 +45,20 @@
             console.log(`ERROR: GET data from ${API}: ${error}`)
         }
     }
-    async function deletePrecipitation(ine_code,year) {
+    async function deletePrecipitation(ine_code) {
         resultStatus = result = "";
         try {
-            const res = await fetch(API+ine_code+"/"+year, {method:"DELETE"});  
+            const res = await fetch(API+ine_code, {method:"DELETE"});  
             const status = res.status;            
             resultStatus=status;
             if (status==200){
-                console.log(`Dato ine_code:${ine_code}, año:${year} borrado con éxito`)
+                console.log(`Dato ine_code:${ine_code} borrado con éxito`)
                 getPrecipitations();
             }else{
                 if(status ==404){
-                    alert(`No se ha encontrado el dato ine_code:${ine_code}, año:${year} `)
+                    alert(`No se ha encontrado el dato ine_code:${ine_code} `)
                 }
-                console.log(`ERROR deleting Precipitation ${ine_code} ${year}: status received\n${status}`);
+                console.log(`ERROR deleting Precipitation ${ine_code}: status received\n${status}`);
             }
         } catch (error) {
             console.log(`ERROR: GET data from ${API}: ${error}`);
@@ -96,7 +96,7 @@
                 },
                 body: JSON.stringify({
                     "ine_code": toValidNumber(Number(newPrecipitationIneCode)),
-                    "year": toValidNumber(Number(newOcupiedYear)),
+                    "year": toValidNumber(Number(newPrecipitationYear)),
                     "province": newPrecipitationProvince?.trim()|| undefined,
                     "annual_precipitation": toValidNumber(Number(newPrecipitationAnnualPrecipitation)),
                     "historical_average": toValidNumber(Number(newPrecipitationHistoricalAverage)),
