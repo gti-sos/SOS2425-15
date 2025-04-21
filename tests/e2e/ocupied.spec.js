@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 //Pruebas FLL
 
 test('has title', async ({ page }) => {
-  await page.goto('http://localhost:16079/ocupied-grand-stats/');
+  await page.goto('localhost:16079');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Ocupieds  Manager/);
@@ -21,7 +21,7 @@ test('create and delete ocupied', async ({ page }) => {
   const testWooded = "2";
   const testNon_agrarian_surface = "3";
 
-  await page.goto('http://localhost:16079/ocupied-grand-stats/');
+  await page.goto('localhost:16079');
 
   await page.getByRole('textbox').nth(6).fill(testIneCode);
   await page.getByRole('textbox').nth(7).fill(testProvince);

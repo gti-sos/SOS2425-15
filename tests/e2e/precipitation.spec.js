@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 //Pruebas FLL
 
 test('has title', async ({ page }) => {
-  await page.goto('http://localhost:16079/precipitation-stats/');
+  await page.goto('localhost:16079');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Precipitations  Manager/);
@@ -22,7 +22,7 @@ test('create and delete precipitation', async ({ page }) => {
   const testDeviation = "2";
 
 
-  await page.goto('http://localhost:16079/precipitation-stats/');
+  await page.goto('localhost:16079');
 
   await page.getByRole('textbox').nth(6).fill(testIneCode);
   await page.getByRole('textbox').nth(9).fill(testYear);
