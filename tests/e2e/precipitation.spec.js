@@ -13,11 +13,10 @@ test('has title', async ({ page }) => {
 
 
 test('create and delete precipitation', async ({ page }) => {
-  const testIneCode = "2";
-  const testYear = "2024";
+  const testIneCode = "109";
+  const testYear = "2027";
   const testProvince = "Sevilla";
   const testAnnualPrecipitation = "20";
-  
   const testHistoricalAverage = "1";
   const testDeviation = "2";
 
@@ -25,9 +24,9 @@ test('create and delete precipitation', async ({ page }) => {
   await page.goto('http://localhost:16079/precipitation-stats/');
 
   await page.getByRole('textbox').nth(6).fill(testIneCode);
-  await page.getByRole('textbox').nth(9).fill(testYear);
-  await page.getByRole('textbox').nth(7).fill(testProvince);
-  await page.getByRole('textbox').nth(8).fill(testAnnualPrecipitation);
+  await page.getByRole('textbox').nth(7).fill(testYear);
+  await page.getByRole('textbox').nth(8).fill(testProvince);
+  await page.getByRole('textbox').nth(9).fill(testAnnualPrecipitation);
   await page.getByRole('textbox').nth(10).fill(testHistoricalAverage);
   await page.getByRole('textbox').nth(11).fill(testDeviation);
 
