@@ -374,7 +374,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/precipitation-stats/loadInitialDataMJM",
+					"raw": "{{BASE_URL}}/api/v1/precipitation-stats/loadInitialData",
 					"host": [
 						"{{BASE_URL}}"
 					],
@@ -382,7 +382,7 @@
 						"api",
 						"v1",
 						"precipitation-stats",
-						"loadInitialDataMJM"
+						"loadInitialData"
 					]
 				}
 			},

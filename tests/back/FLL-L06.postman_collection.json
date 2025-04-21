@@ -14,7 +14,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							
+							"pm.test(\"Status is 200\", function () {\r",
+							"     pm.response.to.have.status(200);\r",
+							"});"
 							
 						],
 						"type": "text/javascript",
@@ -29,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialDataFLL",
+					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialData",
 					"host": [
 						"{{BASE_URL}}"
 					],
@@ -37,7 +39,7 @@
 						"api",
 						"v1",
 						"ocupied-grand-stats",
-						"loadInitialDataFLL"
+						"loadInitialData"
 					]
 				}
 			},
@@ -349,7 +351,7 @@
 			"response": []
 		},
 		{
-			"name": "Cargar todos los datos Copy ",
+			"name": "Delete de todos los datos",
 			"event": [
 				{
 					"listen": "test",
@@ -366,7 +368,7 @@
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
 				"url": {
 					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats",
@@ -377,6 +379,41 @@
 						"api",
 						"v1",
 						"ocupied-grand-stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cargar todos los datos Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/loadInitialDataFLL",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ocupied-grand-stats",
+						"loadInitialDataFLL"
 					]
 				}
 			},
@@ -631,7 +668,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete de todos los datos",
+			"name": "Restaurar datos principio",
 			"event": [
 				{
 					"listen": "test",
@@ -650,17 +687,18 @@
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats",
+					"raw": "{{BASE_URL}}/api/v1/ocupied-grand-stats/reset",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"ocupied-grand-stats"
+						"ocupied-grand-stats",
+						"reset"
 					]
 				}
 			},

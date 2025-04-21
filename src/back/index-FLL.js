@@ -48,7 +48,7 @@ database.insert(ocupied_grand_stats, (err, newDocs) => {
 
 function loadBackendFLL(app){
     
-    // APIs de FLL
+    // APIs de 
     app.get(BASE_API + "/ocupied-grand-stats/docs", (req, res) => {
         res.redirect("https://documenter.getpostman.com/view/42153958/2sAYkLncz8"); 
     });
@@ -310,7 +310,7 @@ app.post(BASE_API + "/ocupied-grand-stats/reset", (req, res) => {
                 if (numRemoved === 0) return res.sendStatus(404);
                 res.status(200).json({ message: "Deleted successfully", removed: numRemoved });
             }
-        );
+        ); 
     });
     
 }
