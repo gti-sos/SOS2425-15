@@ -1,3 +1,9 @@
+<svelte:head>
+    <title>
+        Precipitations Manager
+    </title>
+</svelte:head>
+
 <script>
     //@ts-nocheck
     import {onMount} from "svelte";
@@ -242,11 +248,7 @@
     <Button on:click={searchPrecipitations}>Buscar</Button>
 </div>
 
-<svelte:head>
-    <title>
-        Precipitations Manager
-    </title>
-</svelte:head>
+
 
 <h2>precipitations-stats</h2>
 <Table>

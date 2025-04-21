@@ -1,3 +1,9 @@
+<svelte:head>
+    <title>
+        Ocupieds Manager
+    </title>
+</svelte:head>
+
 <script>
     //@ts-nocheck
     import {onMount} from "svelte";
@@ -248,11 +254,7 @@
     <Button on:click={searchOcupieds}>Buscar</Button>
 </div>
 
-<svelte:head>
-    <title>
-        Ocupieds Manager
-    </title>
-</svelte:head>
+
 
 <h2>ocupied-grand-stats</h2>
 <Table>
