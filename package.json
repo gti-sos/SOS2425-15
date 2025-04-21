@@ -5,23 +5,16 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "@sveltejs/adapter-node": "^5.2.12",
-    "@sveltestrap/sveltestrap": "^7.1.0",
-    "bootstrap": "^5.3.5",
     "core-util-is": "^1.0.3",
-    "cors": "^2.8.5",
     "express": "^4.21.2",
     "inherits": "^2.0.4",
     "isarray": "^1.0.0",
     "nedb": "^1.8.0",
-    "nvm": "^0.0.4",
     "process-nextick-args": "^1.0.7",
     "readable-stream": "^2.2.11",
     "safe-buffer": "^5.0.1",
     "stream-spigot": "^3.0.6",
     "string_decoder": "^1.0.3",
-    "svelte": "^5.28.1",
-    "sveltestrap": "^5.11.3",
     "util-deprecate": "^1.0.2",
     "xtend": "^4.0.2"
   },
@@ -31,16 +24,19 @@
     "test-api-online-Manuel": "npx newman run ./tests/back/Manuel-L06.postman_collection.json -e ./tests/back/api-env-online.json",
     "test-local-Manuel": "start-server-and-test start http://localhost:16079 test-api-local-Manuel",
     "test-precipitation-stats": "npm run test-local-Manuel",
+
     "test-api-local-Fernando": "npx newman run ./tests/back/FLL-L06.postman_collection.json -e ./tests/back/api-env-local.json",
     "test-api-online-Fernando": "npx newman run ./tests/back/FLL-L06.postman_collection.json -e ./tests/back/api-env-online.json",
     "test-local-Fernando": "start-server-and-test start http://localhost:16079 test-api-local-Fernando",
     "test-ocupied-grand-stats": "npm run test-local-Fernando",
+
     "test-api-local-Gonzalo": "npx newman run ./tests/back/Gonzalo-L06.postman_collection.json -e ./tests/back/api-env-local.json",
     "test-api-online-Gonzalo": "npx newman run ./tests/back/Gonzalo-L06.postman_collection.json -e ./tests/back/api-env-online.json",
     "test-local-Gonzalo": "start-server-and-test start http://localhost:16079 test-api-local-Gonzalo",
     "test-temperature-stats": "npm run test-local-Gonzalo",
-    "test": "npm run test-precipitation-stats",
-    "build": "cd src/front; npm install; npm run build"
+
+
+    "test": "npm run test-precipitation-stats && npm run test-ocupied-grand-stats"
   },
   "repository": {
     "type": "git",
@@ -53,8 +49,6 @@
   },
   "homepage": "https://github.com/gti-sos/SOS2425-15#readme",
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
-    "@types/node": "^22.14.1",
     "start-server-and-test": "^2.0.11"
   }
 }

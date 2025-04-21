@@ -11,5 +11,4 @@
     
     <p><a href="https://sos2425-15.onrender.com/api/v1/precipitation-stats/docs">https://sos2425-15.onrender.com/api/v1/precipitation-stats/docs</a> (developed by Manuel Jiménez Martín)</p>
     <p><a href="https://sos2425-15.onrender.com/api/v1/temperature-stats/docs">https://sos2425-15.onrender.com/api/v1/temperature-stats/docs</a> (developed by Gonzalo Gavilán Turiño)</p>
-    <p><a href="https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/docs"> https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/docs</a> (developed by Fernando Lagares Luna)
-    </p>
+    <p><a href="https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/docs"> https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/docs</a> (developed by Fernando Lagares Luna)</p>
