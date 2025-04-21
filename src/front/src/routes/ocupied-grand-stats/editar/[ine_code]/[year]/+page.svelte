@@ -1,27 +1,21 @@
 <svelte:head>
-    <title> Edit Ocupied Info</title>
+    <title>Edit Ocupied Info</title>
 </svelte:head>
+
 <script>
     //@ts-nocheck
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
-<<<<<<< HEAD
-    import { Table,Button } from 'sveltestrap';
-=======
-    import { Table,Button } from "sveltestrap";
->>>>>>> 59a8f223c2db8d8bcac249658f76499e466fb575
+    import { Table, Button } from "@sveltestrap/sveltestrap";
     import { page } from "$app/stores";
     import { get } from "svelte/store";
     import { goto } from '$app/navigation';
-	import { title } from "process";
-
 
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/ocupied-grand-stats/";
     if (dev) {
         API = DEVEL_HOST + API;
     }
-
     let ocupiedData = [];
     let result = "";
     let resultStatus = "";
@@ -64,7 +58,7 @@
     }
 
     async function updateOcupied(ocupied) {
-        const url = `${API}${ocupied.ine_code}/${ocupied.year}`;
+        const url = `${API}${ocupied.ine_code}`;
         try {
             const res = await fetch(url, {
                 method: "PUT",
@@ -121,10 +115,10 @@
     </thead>
     <tbody>
         <tr>
-            <td><input bind:value={editIneCode} disabled></td>
+            <td><input bind:value={editIneCode}></td>
             <td><input bind:value={editProvince}></td>
             <td><input bind:value={editGround}></td>
-            <td><input bind:value={editYear} disabled></td>
+            <td><input bind:value={editYear}></td>
             <td><input bind:value={editGrass}></td>
             <td><input bind:value={editWooded}></td>
             <td><input bind:value={editNon_agrarian_surface}></td>

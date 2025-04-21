@@ -2,12 +2,7 @@
     //@ts-nocheck
     import {onMount} from "svelte";
     import {dev} from "$app/environment"
-<<<<<<< HEAD
-    import { Table,Button } from 'sveltestrap';
-=======
-    import { Table,Button } from "sveltestrap";
->>>>>>> 59a8f223c2db8d8bcac249658f76499e466fb575
-
+    import { Table,Button } from "@sveltestrap/sveltestrap";
     
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/ocupied-grand-stats/";
@@ -52,20 +47,20 @@
             console.log(`ERROR: GET data from ${API}: ${error}`)
         }
     }
-    async function deleteOcupied(ine_code,year) {
+    async function deleteOcupied(ine_code) {
         resultStatus = result = "";
         try {
-            const res = await fetch(API+ine_code+"/"+year, {method:"DELETE"});  
+            const res = await fetch(API+ine_code, {method:"DELETE"});  
             const status = res.status;            
             resultStatus=status;
             if (status==200){
-                console.log(`Dato ine_code:${ine_code}, año:${year} borrado con éxito`)
+                console.log(`Dato ine_code:${ine_code} borrado con éxito`)
                 getOcupieds();
             }else{
                 if(status ==404){
-                    alert(`No se ha encontrado el dato ine_code:${ine_code}, año:${year} `)
+                    alert(`No se ha encontrado el dato ine_code:${ine_code} `)
                 }
-                console.log(`ERROR deleting Ocupied ${ine_code} ${year}: status received\n${status}`);
+                console.log(`ERROR deleting Ocupied ${ine_code}: status received\n${status}`);
             }
         } catch (error) {
             console.log(`ERROR: GET data from ${API}: ${error}`);
