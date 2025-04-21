@@ -9,7 +9,7 @@ jobs:
       - name: Install dependences
         run: npm install --legacy-peer-deps
       - name: Build front 
-        run: npm run build
+        run: npm run build --legacy-peer-deps
       - name: Run tests
         run: npm test
       - name: Run server for e2e tests
