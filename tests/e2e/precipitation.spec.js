@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 //Pruebas FLL
 
 test('has title', async ({ page }) => {
-  await page.goto('localhost:16079');
+  await page.goto('http://localhost:5173/');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Precipitations  Manager/);
