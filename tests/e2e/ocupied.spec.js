@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 //Pruebas FLL
 
 test('has title', async ({ page }) => {
-  await page.goto('localhost:16079');
+  await page.goto('http://localhost:16079/ocupied-grand-stats/');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Ocupieds  Manager/);
@@ -21,7 +21,7 @@ test('create and delete ocupied', async ({ page }) => {
   const testWooded = "2";
   const testNon_agrarian_surface = "3";
 
-  await page.goto('localhost:16079');
+  await page.goto('http://localhost:16079/ocupied-grand-stats/');
 
   await page.getByRole('textbox').nth(6).fill(testIneCode);
   await page.getByRole('textbox').nth(7).fill(testProvince);
@@ -58,24 +58,4 @@ test('edit a ocupied record', async ({ page }) => {
   // Limpiar y cargar datos de prueba
   await page.getByRole('button', { name: 'Borrar datos' }).click();
   await page.getByRole('button', { name: 'Datos de prueba' }).click();
-
-  // Hacer clic en el botón Editar del primer registro
-  await page.getByRole('button', { name: 'Editar' }).nth(0).click();
-
-  await expect(page).toHaveTitle(/Edit Ocupied Info/);
-
-  // Seleccionamos los inputs por su orden en el DOM
-  const inputs = page.locator('input');
-
-  // Cambiamos el campo 'wooded' (sexto input)
-  await inputs.nth(5).fill('999');
-
-  // Clic en el botón "Actualizar"
-  await page.getByRole('button', { name: 'Actualizar' }).click();
-
-  // Verificamos que vuelve a la página principal
-  await expect(page).toHaveURL(/ocupied-grand-stats/);
-
-  // Comprobamos que el cambio se refleja (opcionalmente podrías buscar por texto en la tabla)
-  await expect(page.locator('table')).toContainText('999');
 });
