@@ -1,13 +1,21 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 
-//Pruebas FLL
-
 test('has title', async ({ page }) => {
-  await page.goto('http://localhost:16079/ocupied-grand-stats/');
+  await page.goto('localhost:16079');
 
   // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Ocupieds  Manager/);
+  await expect(page).toHaveTitle(/Ocupieds Manager/);
+});
+
+test('get radars link', async ({ page }) => {
+  await page.goto('localhost:16079');
+
+  // Click the get started link.
+  await page.getByRole('link', { name: 'FLL Data' }).click();
+
+  // Expects page to have a heading with the name of Installation.
+  await expect(page).toHaveTitle(/Ocupieds Manager/);
 });
 
 

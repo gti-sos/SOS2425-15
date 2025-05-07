@@ -25,7 +25,7 @@
     let newOcupiedGrass;
     let newOcupiedWooded;
     let newOcupiedNon_agrarian_surface;
-
+    let status_mens = "";
 
     let provinces = [];
 
@@ -60,6 +60,7 @@
             const status = res.status;            
             resultStatus=status;
             if (status==200){
+                status_mens = "Dato borrado"
                 console.log(`Dato ine_code:${ine_code} borrado con éxito`)
                 getOcupieds();
             }else{
@@ -257,6 +258,21 @@
 
 
 <h2>ocupied-grand-stats</h2>
+
+{#if resultStatus}
+    <div>
+        <strong>Estado:</strong> {resultStatus}
+    </div>
+{/if}
+
+{#if result}
+    <div>
+        <strong>Respuesta:</strong>
+        <pre>{result}</pre>
+    </div>
+{/if}
+
+
 <Table>
     <thead>
         <tr>
