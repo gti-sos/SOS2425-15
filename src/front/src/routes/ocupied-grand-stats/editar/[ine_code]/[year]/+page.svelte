@@ -11,8 +11,14 @@
     import { get } from "svelte/store";
     import { goto } from '$app/navigation';
 
+
+
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/ocupied-grand-stats/";
+
+    let successMessage = '';
+    let errorMessage = '';
+    
     if (dev) {
         API = DEVEL_HOST + API;
     }
@@ -72,9 +78,13 @@
             if (status ==200) {
                 console.log("Ocupied updated successfully");
                 console.log("Dato actualizado correctamente")
+                successMessage = "✅ Accidente actualizado correctamente";
+                errorMessage = '';
+
                 goto("/ocupied-grand-stats"); // recarga el dato actualizado
             } else {
                 console.error("Failed to update ocupied", res.status);
+                errorMessage = "❌ Ocurrió un error al actualizar el accidente.";
             }
         } catch (error) {
             console.error("Error updating ocupied", error);
