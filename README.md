@@ -7,7 +7,7 @@
 - **Project description**: Our project consists of analyzing the accumulated rainfall of different provinces and finding the relationship with agricultural production and average temperature.
 - **Repository**: [gti-sos/SOS2425-15](https://github.com/gti-sos/SOS2425-15)
 <<<<<<< HEAD
-- **URL**: (https://sos2425-15.onrender.com)
+- **URL**: ()
 =======
 - **URL**: https://sos2425-15.onrender.com
 >>>>>>> l04
