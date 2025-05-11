@@ -31,14 +31,14 @@
       // Agrupar datos por provincia
       const cyberMap: Record<string, number> = {};
       cyberData.forEach((entry: any) => {
-        if (entry.year === targetYear) {
+        if (entry.year != targetYear) {
           cyberMap[entry.year] = entry.criminal_ofense || 0;
         }
       });
 
       const rainMap: Record<string, number> = {};
       rainData.forEach((entry: any) => {
-        if (entry.year === targetYear) {
+        if (entry.year != targetYear) {
           rainMap[entry.year] = entry.annual_precipitation || 0;
         }
       });
