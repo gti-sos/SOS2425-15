@@ -13,6 +13,8 @@
     "inherits": "^2.0.4",
     "isarray": "^1.0.0",
     "nedb": "^1.8.0",
+    "plotly.js": "^3.0.1",
+    "plotly.js-dist": "^3.0.1",
     "process-nextick-args": "^1.0.7",
     "readable-stream": "^2.2.11",
     "safe-buffer": "^5.0.1",
@@ -49,8 +51,9 @@
   },
   "homepage": "https://github.com/gti-sos/SOS2425-15#readme",
   "devDependencies": {
-    "@types/highcharts": "^5.0.44",
     "@playwright/test": "^1.52.0",
+    "@types/highcharts": "^5.0.44",
+    "@types/plotly.js": "^3.0.0",
     "start-server-and-test": "^2.0.11"
   }
 }

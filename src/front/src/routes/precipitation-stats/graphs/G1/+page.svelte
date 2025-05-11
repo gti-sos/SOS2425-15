@@ -113,7 +113,7 @@
         
         Highcharts.chart('container', {
         chart: {
-            type: 'column'
+            type: 'pie'
         },
         title: {
             text: 'Total annual precipitation by province'
