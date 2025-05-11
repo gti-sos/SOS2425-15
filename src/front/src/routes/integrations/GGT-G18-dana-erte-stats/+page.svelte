@@ -67,44 +67,51 @@
   function renderChart(years: number[], minimum_averageData: number[], regData: number[]): void {
     Highcharts.chart('container', {
       chart: {
-        polar: true
+        type: 'column' // 👉 CAMBIAMOS A COLUMNAS
       },
       title: {
         text: 'Comparación de temperatura mínima vs total de trabajos (hombres y mujeres)'
       },
       subtitle: {
-        text: 'Temperatura minima y total de trabajos (hombres y mujeres)'
-      },
-      pane: {
-        startAngle: 0,
-        endAngle: 360
+        text: 'Temperatura mínima y total de trabajos (hombres y mujeres) por año'
       },
       xAxis: {
         categories: years.map(String),
-        tickmarkPlacement: 'on',
-        lineWidth: 0
+        crosshair: true,
+        title: {
+          text: 'Año'
+        }
       },
       yAxis: {
-        gridLineInterpolation: 'polygon',
-        lineWidth: 0,
-        min: 0
+        min: 0,
+        title: {
+          text: 'Valor'
+        }
+      },
+      tooltip: {
+        shared: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
       },
       series: [
         {
-          type: 'line',
+          type: 'column',
           name: 'Temperatura mínima (minimum_average)',
-          data: minimum_averageData,
-          pointPlacement: 'on'
+          data: minimum_averageData
         },
         {
-          type: 'line',
-          name: 'total de trabajos (hombres y mujeres)',
-          data: regData,
-          pointPlacement: 'on'
+          type: 'column',
+          name: 'Total de trabajos (hombres y mujeres)',
+          data: regData
         }
       ]
     });
   }
+
 
   onMount(() => {
     fetchAndProcessData();
