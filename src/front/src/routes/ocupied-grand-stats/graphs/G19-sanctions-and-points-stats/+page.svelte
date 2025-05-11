@@ -1,7 +1,7 @@
 <svelte:head>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/bubble.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/bubble.js"></script>
 </svelte:head>
 
 <script lang="ts">
@@ -13,6 +13,17 @@
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const Highcharts = (window as any).Highcharts;
+
+    // Verificamos y registramos el módulo de burbujas si no lo ha hecho
+    if (Highcharts && !Highcharts.seriesTypes.bubble) {
+      const bubbleModule = (window as any).HighchartsModules?.bubble;
+      if (typeof bubbleModule === 'function') {
+        bubbleModule(Highcharts);
+      } else {
+        console.warn("El módulo bubble no está correctamente disponible.");
+      }
+    }
+
     if (!Highcharts) {
       console.error("Highcharts no está disponible");
       return;
@@ -59,7 +70,7 @@
         },
         tooltip: {
           useHTML: true,
-          headerFormat: '<b>{point.key}</b><br>',
+          headerFormat: '<b>{point.name}</b><br>',
           pointFormat: 'Sanciones: {point.x}<br>Puntos: {point.y}<br>Total: {point.z}'
         },
         plotOptions: {

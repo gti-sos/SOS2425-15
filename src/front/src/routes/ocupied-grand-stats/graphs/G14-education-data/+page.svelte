@@ -1,102 +1,131 @@
 <svelte:head>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/heatmap.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
-  <script src="https://code.highcharts.com/modules/export-data.js"></script>
-  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </svelte:head>
 
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
 
-  const localAPI = "https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/";
-  const remoteAPI = "https://sos2425-14.onrender.com/api/v1/education-data";
+  const landAPI = "https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/";
+  const eduAPI = "https://sos2425-14.onrender.com/api/v1/education-data/";
+
+  // Interfaces para datos
+  interface LandEntry {
+    ine_code: number;
+    year: number;
+    province: string;
+    ground: number;
+    grass: number;
+    wooded: number;
+    non_agrarian_surface: number;
+  }
+
+  interface EduEntry {
+    autonomous_community: string;
+    basic_fp: number;
+    middle_grade: number;
+    higher_grade: number;
+    year: number;
+  }
 
   onMount(async () => {
-    // Espera un poco para que Highcharts esté disponible
-    await new Promise(resolve => setTimeout(resolve, 500));
-
     const Highcharts = (window as any).Highcharts;
-    if (!Highcharts) {
-      console.error("Highcharts no está disponible");
-      return;
-    }
 
     try {
-      const [localRes, remoteRes] = await Promise.all([
-        fetch(localAPI),
-        fetch(remoteAPI)
+      const [landRes, eduRes] = await Promise.all([
+        fetch(landAPI),
+        fetch(eduAPI)
       ]);
-      const localData = await localRes.json();
-      const remoteData = await remoteRes.json();
 
-      const groundByYear: Record<number, number> = {};
-      const educationDataByYear: Record<number, number[]> = {};
+      const landData: LandEntry[] = await landRes.json();
+      const eduData: EduEntry[] = await eduRes.json();
 
-      localData.forEach((entry: { year: string; ground: number }) => {
-        const year = Number(entry.year);
-        groundByYear[year] = (groundByYear[year] || 0) + (entry.ground || 0);
+      const andaluciaProvinces = [
+        "sevilla", "cordoba", "granada", "cadiz", "almería",
+        "jaén", "huelva", "málaga"
+      ];
+
+      const filteredLand: LandEntry[] = landData.filter(
+        (d: LandEntry) =>
+          andaluciaProvinces.includes(d.province.toLowerCase())
+      );
+
+      const andaluciaEdu: EduEntry | undefined = eduData.find(
+        (d: EduEntry) =>
+          d.autonomous_community.toLowerCase() === "andalucia"
+      );
+
+      const educationLevels = ["basic_fp", "middle_grade", "higher_grade"];
+
+      const heatmapData: [number, number, number][] = [];
+
+      filteredLand.forEach((prov: LandEntry, i: number) => {
+        educationLevels.forEach((level: string, j: number) => {
+          const levelValue = (andaluciaEdu as any)[level] ?? 0;
+          heatmapData.push([j, i, Math.round(prov.ground * levelValue)]);
+        });
       });
 
-      remoteData.forEach((entry: { year: number; basic_fp: number; middle_grade: number; higher_grade: number }) => {
-        const { year, basic_fp, middle_grade, higher_grade } = entry;
-        educationDataByYear[year] = [basic_fp || 0, middle_grade || 0, higher_grade || 0];
-      });
-
-      const allYears = Array.from(
-        new Set([...Object.keys(groundByYear), ...Object.keys(educationDataByYear)].map(Number))
-      ).sort((a, b) => a - b);
-
-      const groundData = allYears.map(year => groundByYear[year] || 0);
-      const educationData = allYears.map(year => educationDataByYear[year] || [0, 0, 0]);
-
-      Highcharts.chart('container', {
+      Highcharts.chart("container", {
         chart: {
-          type: 'line'
+          type: "heatmap",
+          marginTop: 40,
+          marginBottom: 80,
+          plotBorderWidth: 1
         },
         title: {
-          text: 'Comparación de Ocupación de Suelo y Educación'
+          text: "Superficie ocupada vs Niveles de FP (Andalucía)"
         },
         xAxis: {
-          categories: allYears.map(String),
-          title: {
-            text: 'Año'
-          }
+          categories: ["FP Básica", "Grado Medio", "Grado Superior"],
+          title: { text: "Nivel de Formación Profesional" }
         },
         yAxis: {
-          title: {
-            text: 'Valores'
+          categories: filteredLand.map((d) => d.province),
+          title: { text: "Provincia" }
+        },
+        colorAxis: {
+          min: 0,
+          minColor: "#FFFFFF",
+          maxColor: "#006837"
+        },
+        legend: {
+          align: "right",
+          layout: "vertical",
+          margin: 0,
+          verticalAlign: "top",
+          y: 25,
+          symbolHeight: 280
+        },
+        tooltip: {
+          formatter: function () {
+            return `<b>${this.series.yAxis.categories[this.point.y]}</b><br>
+                    ${this.series.xAxis.categories[this.point.x]}<br>
+                    Valor: <b>${Math.round(this.point.value)}</b>`;
           }
         },
         series: [
-          { name: 'Suelo Ocupado', data: groundData },
-          { name: 'FP Básica', data: educationData.map(d => d[0]) },
-          { name: 'Grado Medio', data: educationData.map(d => d[1]) },
-          { name: 'Grado Superior', data: educationData.map(d => d[2]) }
+          {
+            name: "Superficie ocupada x Nivel FP",
+            borderWidth: 1,
+            data: heatmapData,
+            dataLabels: {
+              enabled: true,
+              color: "#000000"
+            }
+          }
         ]
       });
-    } catch (err) {
-      console.error("Error al obtener o procesar los datos:", err);
+    } catch (error) {
+      console.error("Error cargando datos:", error);
     }
   });
 </script>
 
 <figure class="highcharts-figure">
-  <div id="container" style="min-height: 400px;"></div>
-  <p class="highcharts-description">
-    Comparación entre superficie ocupada y datos educativos por año.
+  <div id="container" style="height: 500px; max-width: 900px; margin: auto"></div>
+  <p class="highcharts-description" style="text-align: center;">
+    Mapa de calor que relaciona el uso del suelo con niveles de formación profesional en provincias de Andalucía.
   </p>
 </figure>
-
-<style>
-  .highcharts-figure {
-    min-width: 320px;
-    max-width: 800px;
-    margin: 1em auto;
-  }
-
-  .highcharts-description {
-    text-align: center;
-    margin-top: 1rem;
-  }
-</style>
