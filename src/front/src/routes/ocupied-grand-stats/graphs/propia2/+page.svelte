@@ -14,6 +14,9 @@
     .highcharts-description {
         margin: 0.3rem 10px;
     }
+    #c3-container {
+    height: 400px; /* o el alto que prefieras */
+    }
 </style>
 
 <script>
