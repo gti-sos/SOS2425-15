@@ -58,7 +58,7 @@
 
     console.log("Años:", allYears);
     console.log("Temperaturas mínimas:", minimum_averageData);
-    console.log("total_work_su:", regData);
+    console.log("total_work_sus:", regData);
 
 
     renderChart(allYears, minimum_averageData, regData);
