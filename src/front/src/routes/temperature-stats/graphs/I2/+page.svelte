@@ -1,117 +1,61 @@
 <svelte:head>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </svelte:head>
 
-<style>
-    .highcharts-figure,
-    .highcharts-data-table table {
-        min-width: 310px;
-        max-width: 800px;
-        margin: 1em auto;
-    }
+<script lang="ts">
+  import { onMount } from 'svelte';
 
-    #container {
-        height: 400px;
-    }
+  let chart: Chart | null = null;
 
-    .highcharts-description {
-        margin: 0.3rem 10px;
-    }
-</style>
+  const apiURL = 'https://sos2425-15.onrender.com/api/v1/temperature-stats/';
 
-<script>
-    //@ts-nocheck
-    import { onMount } from "svelte";
-    import { dev } from "$app/environment";
+  onMount(async () => {
+    try {
+      const response = await fetch(apiURL);
+      const data = await response.json();
 
-    let DEVEL_HOST = "http://localhost:16079";
-    let API = "/api/v1/temperature-stats";
+      // Agrupamos por país y obtenemos temperaturas medias (asumiendo campo "averageTemperature")
+      const filtered = data.filter((item: any) => item.averageTemperature && item.country);
+      const sorted = filtered.slice(0, 10); // Tomamos 10 primeros para simplificar
 
-    if (dev) {
-        API = DEVEL_HOST + API;
-    }
+      const labels = sorted.map((d: any) => d.country + " (" + d.year + ")");
+      const values = sorted.map((d: any) => d.averageTemperature);
 
-    let exChangesData = [];
-    let result = "";
-    let resultStatus = "";
+      const ctx = (document.getElementById('tempChart') as HTMLCanvasElement).getContext('2d');
+      if (chart) chart.destroy();
 
-    async function getData() {
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API, { method: "GET" });
-            const data = await res.json();
-
-            result = JSON.stringify(data, null, 2);
-            exChangesData = data;
-            console.log(`response received : ${JSON.stringify(exChangesData, null, 2)} `);
-        } catch (error) {
-            console.log(`ERROR: GET from ${API}: ${error}`);
-        }
-    }
-
-    onMount(async () => {
-        await getData();
-
-        const average_temperatureProvince = {};
-
-        exChangesData.forEach(entry => {
-            const province = entry.province;
-            const average_temperature = entry.average_temperature || 0;
-
-            if (average_temperatureProvince[province]) {
-                average_temperatureProvince[province] = Math.max(
-                    average_temperatureProvince[province],
-                    average_temperature
-                );
-            } else {
-                average_temperatureProvince[province] = average_temperature;
-            }
-        });
-
-        const categories = Object.keys(average_temperatureProvince);
-        const temperatureData = Object.values(average_temperatureProvince);
-
-        Highcharts.chart('container', {
-            chart: {
-                type: 'area' // ← CAMBIO AQUÍ
-            },
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Temperatura Media (°C)',
+            data: values,
+            fill: true,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
             title: {
-                text: 'average_temperature by province'
-            },
-            xAxis: {
-                categories: categories,
-                title: {
-                    text: 'Provincia'
-                }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'average_temperature'
-                }
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.y}</b>'
-            },
-            plotOptions: {
-                area: {
-                    fillOpacity: 0.5,
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            },
-            series: [{
-                name: 'average_temperature',
-                data: temperatureData
-            }]
-        });
-    });
+              display: true,
+              text: 'Temperatura Media por País (datos de la API SOS2425)'
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error al cargar datos:", error);
+    }
+  });
 </script>
 
-<figure class="highcharts-figure">
-    <div id="container"></div>
+<figure style="max-width: 800px; margin: auto;">
+  <canvas id="tempChart" width="800" height="400"></canvas>
+  <p style="text-align: center; margin-top: 1rem;">
+    Gráfico de líneas que muestra la temperatura media registrada por país según la API SOS2425.
+  </p>
 </figure>
