@@ -32,7 +32,7 @@
       const cyberMap: Record<string, number> = {};
       cyberData.forEach((entry: any) => {
         if (entry.year === targetYear) {
-          cyberMap[entry.autonomus_community] = entry.criminal_ofense || 0;
+          cyberMap[entry.province] = entry.criminal_ofense || 0;
         }
       });
 
