@@ -1,57 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>JokeAPI Pyramid Chart</title>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/funnel.js"></script>
-</head>
-<body>
-    <div id="container" style="width:100%; height:400px;"></div>
+<svelte:head>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/packed-bubble.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</svelte:head>
 
-    <script>
-        // Función para obtener chistes de la API
-        async function fetchJokes() {
-            const response = await fetch('https://v2.jokeapi.dev/joke/Any?amount=5');
-            const data = await response.json();
-            return data.jokes.map((joke, index) => {
-                const jokeText = joke.type === 'single' ? joke.joke : joke.setup + ' ' + joke.delivery;
-                return [jokeText, 100 - index * 20]; // Asignar valores decrecientes
-            });
-        }
+<script lang="ts">
+  import { onMount } from 'svelte';
 
-        // Función para renderizar la gráfica
-        async function renderChart() {
-            const jokesData = await fetchJokes();
+  const countriesAPI = "https://restcountries.com/v3.1/all";
 
-            Highcharts.chart('container', {
-                chart: {
-                    type: 'pyramid'
-                },
-                title: {
-                    text: 'Top 5 Chistes de JokeAPI'
-                },
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b> ({point.y})',
-                            color: 'black',
-                            softConnector: true
-                        },
-                        center: ['40%', '50%'],
-                        width: '80%'
-                    }
-                },
-                series: [{
-                    name: 'Chistes',
-                    data: jokesData
-                }]
-            });
-        }
+  onMount(async () => {
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Llamar a la función para renderizar la gráfica
-        renderChart();
-    </script>
-</body>
-</html>
+    const Highcharts = (window as any).Highcharts;
+    if (!Highcharts) {
+      console.error("Highcharts no está disponible");
+      return;
+    }
 
+    try {
+      const response = await fetch(countriesAPI);
+      const countries = await response.json();
+
+      const regionData: Record<string, any[]> = {};
+
+      countries.forEach((country: any) => {
+        const region = country.region || "Other";
+        if (!regionData[region]) regionData[region] = [];
+
+        regionData[region].push({
+          name: country.name.common,
+          value: country.population || 0
+        });
+      });
+
+      const bubbleSeries = Object.entries(regionData).map(([region, countries]) => ({
+        name: region,
+        data: countries
+      }));
+
+      Highcharts.chart('container', {
+        chart: {
+          type: 'packedbubble'
+        },
+        title: {
+          text: 'Población por país agrupada por región'
+        },
+        tooltip: {
+          useHTML: true,
+          pointFormat: '<b>{point.name}:</b> {point.value} habitantes'
+        },
+        plotOptions: {
+          packedbubble: {
+            minSize: '20%',
+            maxSize: '100%',
+            zMin: 0,
+            zMax: 1400000000,
+            layoutAlgorithm: {
+              gravitationalConstant: 0.05,
+              splitSeries: true,
+              seriesInteraction: false,
+              dragBetweenSeries: true,
+              parentNodeLimit: true
+            },
+            dataLabels: {
+              enabled: true,
+              format: '{point.name}',
+              filter: {
+                property: 'y',
+                operator: '>',
+                value: 100000000 // solo etiquetas para países con +100M
+              },
+              style: {
+                color: 'black',
+                textOutline: 'none',
+                fontWeight: 'normal'
+              }
+            }
+          }
+        },
+        series: bubbleSeries
+      });
+    } catch (error) {
+      console.error("Error cargando datos:", error);
+    }
+  });
+</script>
+
+<figure class="highcharts-figure">
+  <div id="container" style="height: 600px;"></div>
+  <p class="highcharts-description">
+    Gráfico de burbujas agrupadas mostrando la población de los países, organizada por región.
+  </p>
+</figure>
+
+<style>
+  .highcharts-figure {
+    max-width: 1000px;
+    margin: auto;
+  }
+  .highcharts-description {
+    text-align: center;
+    margin-top: 1rem;
+  }
+</style>
