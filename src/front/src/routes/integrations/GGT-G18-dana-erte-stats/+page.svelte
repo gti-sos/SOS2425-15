@@ -37,7 +37,7 @@
     }
 
     for (const entry of remoteData) {
-      const year = Number(entry.total_work_sus);
+      const year = Number(entry.request_year);
       const total_work_sus = Number(entry.total_work_sus) || 0;
 
       total_work_susByYear[year] = (total_work_susByYear[year] || 0) + total_work_sus;
@@ -70,10 +70,10 @@
         polar: true
       },
       title: {
-        text: 'Comparación de temperatura mínima vs media velocidad Multada'
+        text: 'Comparación de temperatura mínima vs total de trabajos (hombres y mujeres)'
       },
       subtitle: {
-        text: 'Temperatura minima y velocidad media multada'
+        text: 'Temperatura minima y total de trabajos (hombres y mujeres)'
       },
       pane: {
         startAngle: 0,
@@ -98,7 +98,7 @@
         },
         {
           type: 'line',
-          name: 'Media velocidad multada',
+          name: 'total de trabajos (hombres y mujeres)',
           data: regData,
           pointPlacement: 'on'
         }
@@ -114,7 +114,7 @@
 <figure class="highcharts-figure">
   <div id="container"></div>
   <p class="highcharts-description">
-    Comparación  entre temperatura media en alguna provincia por año y media de velocidad multada por radares.
+    Comparación  entre temperatura media en alguna provincia por año y total de trabajos (hombres y mujeres).
   </p>
 </figure>
 
