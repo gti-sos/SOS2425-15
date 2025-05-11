@@ -98,13 +98,7 @@
           y: 25,
           symbolHeight: 280
         },
-        tooltip: {
-          formatter: function () {
-            return `<b>${this.series.yAxis.categories[this.point.y]}</b><br>
-                    ${this.series.xAxis.categories[this.point.x]}<br>
-                    Valor: <b>${Math.round(this.point.value)}</b>`;
-          }
-        },
+        
         series: [
           {
             name: "Superficie ocupada x Nivel FP",

@@ -1,7 +1,8 @@
 <svelte:head>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script> <!-- NECESARIO -->
   <script src="https://code.highcharts.com/modules/bubble.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
 </svelte:head>
 
 <script lang="ts">
@@ -14,16 +15,6 @@
 
     const Highcharts = (window as any).Highcharts;
 
-    // Verificamos y registramos el módulo de burbujas si no lo ha hecho
-    if (Highcharts && !Highcharts.seriesTypes.bubble) {
-      const bubbleModule = (window as any).HighchartsModules?.bubble;
-      if (typeof bubbleModule === 'function') {
-        bubbleModule(Highcharts);
-      } else {
-        console.warn("El módulo bubble no está correctamente disponible.");
-      }
-    }
-
     if (!Highcharts) {
       console.error("Highcharts no está disponible");
       return;
@@ -34,7 +25,7 @@
       const data = await response.json();
 
       // Agrupar por comunidad autónoma
-      const grouped: Record<string, { sanctions: number, points: number }> = {};
+      const grouped: Record<string, { sanctions: number; points: number }> = {};
 
       data.forEach((entry: any) => {
         const key = entry.autonomous_community;
@@ -45,7 +36,6 @@
         grouped[key].points += entry.total_points_deducted || 0;
       });
 
-      // Convertimos a array de burbujas
       const bubbleData = Object.entries(grouped).map(([community, stats]) => ({
         name: community,
         x: stats.sanctions,
