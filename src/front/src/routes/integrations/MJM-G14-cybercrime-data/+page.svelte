@@ -32,14 +32,14 @@
       const cyberMap: Record<string, number> = {};
       cyberData.forEach((entry: any) => {
         if (entry.year === targetYear) {
-          cyberMap[entry.province] = entry.criminal_ofense || 0;
+          cyberMap[entry.year] = entry.criminal_ofense || 0;
         }
       });
 
       const rainMap: Record<string, number> = {};
       rainData.forEach((entry: any) => {
         if (entry.year === targetYear) {
-          rainMap[entry.province] = entry.annual_precipitation || 0;
+          rainMap[entry.year] = entry.annual_precipitation || 0;
         }
       });
 
