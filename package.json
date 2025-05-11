@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
+    "apexcharts": "^4.7.0",
     "core-util-is": "^1.0.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -48,7 +49,11 @@
   },
   "homepage": "https://github.com/gti-sos/SOS2425-15#readme",
   "devDependencies": {
+<<<<<<< HEAD
     "@types/highcharts": "^5.0.44",
+=======
+    "@playwright/test": "^1.52.0",
+>>>>>>> 713053d3cb8ecb1f1a02eb909ea23279d25016a6
     "start-server-and-test": "^2.0.11"
   }
 }
