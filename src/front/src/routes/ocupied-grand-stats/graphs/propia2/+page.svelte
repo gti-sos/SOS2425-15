@@ -1,78 +1,80 @@
 <!-- svelte-ignore css_unused_selector -->
 <svelte:head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css" rel="stylesheet" />
 </svelte:head>
 
 <style>
-    .c3-chart {
+    .chart-wrapper {
         max-width: 600px;
-        margin: 1rem auto;
+        margin: 2em auto;
     }
 
-    #c3-container {
-        height: 400px;
-    }
-
-    .highcharts-description {
-        margin: 0.3rem 10px;
+    .c3-tooltip {
+        font-size: 14px;
     }
 </style>
 
 <script>
-    //@ts-nocheck
+	//@ts-nocheck
     import { onMount } from "svelte";
+    import { dev } from "$app/environment";
 
-    let DEVEL_HOST= "http://localhost:16079";
-    let API= "/api/v1/ocupied-grand-stats";
+    let DEVEL_HOST = "http://localhost:16079";
+    let API = "/api/v1/ocupied-grand-stats";
 
-    if (dev){
-        API= DEVEL_HOST + API
-    };
+    if (dev) {
+        API = DEVEL_HOST + API;
+    }
 
-    let apiData = [];
+    let exChangesData = [];
 
     async function getData() {
         try {
-            const res = await fetch(API);
-            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-            apiData = await res.json();
+            const res = await fetch(API, { method: "GET" });
+            const data = await res.json();
+            exChangesData = data;
+            console.log("API data:", data);
         } catch (error) {
-            console.error(`ERROR fetching data from ${API}: ${error}`);
+            console.error(`Error fetching data from ${API}:`, error);
         }
     }
 
     onMount(async () => {
         await getData();
 
-        if (!apiData || apiData.length === 0) {
-            console.warn("No data received");
-            return;
-        }
+        const groundProvince = {};
 
-        // Suponemos que cada entrada tiene formato: { province: '...', totalGround: number }
-        const columns = apiData.map(entry => [
-            entry.province,
-            Number(entry.totalGround) || 0
-        ]);
+        exChangesData.forEach(entry => {
+            const province = entry.province;
+            const ground = entry.ground || 0;
+            if (groundProvince[province]) {
+                groundProvince[province] += ground;
+            } else {
+                groundProvince[province] = ground;
+            }
+        });
 
-        // Espera a que el DOM esté listo
-        setTimeout(() => {
-            c3.generate({
-                bindto: '#c3-container',
-                data: {
-                    columns: columns,
-                    type: 'donut'
-                },
-                donut: {
-                    title: "Ocupación por provincia"
+        const pieData = Object.entries(groundProvince);
+
+        c3.generate({
+            bindto: '#chart',
+            data: {
+                columns: pieData,
+                type: 'pie'
+            },
+            pie: {
+                label: {
+                    format: function (value, ratio, id) {
+                        return `${value} MT`;
+                    }
                 }
-            });
-        }, 100);
+            }
+        });
     });
 </script>
 
-<figure class="highcharts-figure">
-    <div id="c3-container" class="c3-chart"></div>
-</figure>
+<div class="chart-wrapper">
+    <div id="chart"></div>
+</div>
