@@ -65,6 +65,7 @@
   }
 
   function renderChart(years: number[], minimum_averageData: number[], regData: number[]): void {
+    // @ts-ignore
     Highcharts.chart('container', {
       chart: {
         polar: true
