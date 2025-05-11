@@ -12,6 +12,7 @@
 
   // @ts-ignore
   const Highcharts = window.Highcharts;
+  
 
   const localAPI = "https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats";
   const remoteAPI = "https://sos2425-10.onrender.com/api/v1/registrations-stats";
@@ -51,6 +52,7 @@
   }
 
   function renderChart(years: number[], groundData: number[], regData: number[]): void {
+    // @ts-ignore
     Highcharts.chart('container', {
       chart: {
         polar: true
