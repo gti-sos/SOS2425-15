@@ -1,4 +1,8 @@
-<!-- svelte-ignore css_unused_selector -->
+<script context="module" lang="ts">
+    // 👇 Declaración de variable global válida en este contexto
+    declare let Highcharts: any;
+</script>
+
 <svelte:head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -61,9 +65,6 @@
 
 <script lang="ts">
     import { onMount } from "svelte";
-
-    // 👇 Declara Highcharts como variable global para evitar errores
-    declare let Highcharts: any;
 
     let API = "https://restcountries.com/v3.1/all";
 

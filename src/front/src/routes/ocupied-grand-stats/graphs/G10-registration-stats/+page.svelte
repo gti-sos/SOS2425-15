@@ -8,19 +8,15 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { dev } from '$app/environment';
 
-  // @ts-ignore
-  const Highcharts = window.Highcharts;
+  // Asegúrate de importar Highcharts de forma correcta
+  import Highcharts from 'highcharts';
 
   const localAPI = "https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats";
   const remoteAPI = "https://sos2425-10.onrender.com/api/v1/registrations-stats";
 
   async function fetchAndProcessData(): Promise<void> {
-    const [localRes, remoteRes] = await Promise.all([
-      fetch(localAPI),
-      fetch(remoteAPI)
-    ]);
+    const [localRes, remoteRes] = await Promise.all([fetch(localAPI), fetch(remoteAPI)]);
     const localData = await localRes.json();
     const remoteData = await remoteRes.json();
 
@@ -50,8 +46,18 @@
     renderChart(allYears, groundData, regData);
   }
 
+  // Usar una referencia a un contenedor para acceder a él correctamente
+  let container: HTMLDivElement;
+
   function renderChart(years: number[], groundData: number[], regData: number[]): void {
-    Highcharts.chart('container', {
+    // Asegurarse de que container sea un HTMLElement válido
+    if (!container) {
+      console.error("Contenedor no encontrado");
+      return;
+    }
+
+    // Ahora Highcharts.chart debería funcionar correctamente
+    Highcharts.chart(container, {
       chart: {
         polar: true
       },
@@ -98,57 +104,20 @@
 </script>
 
 <figure class="highcharts-figure">
-  <div id="container"></div>
+  <div bind:this={container} style="height: 400px;"></div>
   <p class="highcharts-description">
     Comparación polar entre superficie ocupada y matriculaciones generales por año.
   </p>
 </figure>
 
 <style>
-.highcharts-figure,
-.highcharts-data-table table {
-  min-width: 320px;
-  max-width: 660px;
-  margin: 1em auto;
-}
+  .highcharts-figure {
+    min-width: 320px;
+    max-width: 660px;
+    margin: 1em auto;
+  }
 
-.highcharts-data-table table {
-  font-family: Verdana, sans-serif;
-  border-collapse: collapse;
-  border: 1px solid #ebebeb;
-  margin: 10px auto;
-  text-align: center;
-  width: 100%;
-  max-width: 500px;
-}
-
-.highcharts-data-table caption {
-  padding: 1em 0;
-  font-size: 1.2em;
-  color: #555;
-}
-
-.highcharts-data-table th {
-  font-weight: 600;
-  padding: 0.5em;
-}
-
-.highcharts-data-table td,
-.highcharts-data-table th,
-.highcharts-data-table caption {
-  padding: 0.5em;
-}
-
-.highcharts-data-table thead tr,
-.highcharts-data-table tbody tr:nth-child(even) {
-  background: #f8f8f8;
-}
-
-.highcharts-data-table tr:hover {
-  background: #f1f7ff;
-}
-
-.highcharts-description {
-  margin: 0.3rem 10px;
-}
+  .highcharts-description {
+    margin: 0.3rem 10px;
+  }
 </style>

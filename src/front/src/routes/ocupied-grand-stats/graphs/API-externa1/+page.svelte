@@ -1,4 +1,8 @@
-<!-- svelte-ignore css_unused_selector -->
+<script context="module" lang="ts">
+    // 👇 Declaración de variable global válida en este contexto
+    declare let Highcharts: any;
+</script>
+
 <svelte:head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -62,12 +66,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    // 👇 Declara Highcharts como variable global para evitar errores de tipo
-    declare let Highcharts: any;
-
     let API = "https://disease.sh/v3/covid-19/countries";
 
-    // 👇 Define el tipo del array con una interfaz mínima
     interface CountryData {
         country: string;
         cases: number;
@@ -94,7 +94,6 @@
     onMount(async () => {
         await getData();
 
-        // 👇 Tipamos correctamente como objeto indexado
         const countryCases: Record<string, number> = {};
 
         covidData
