@@ -11,11 +11,12 @@
         margin: 1rem auto;
     }
 
+    #c3-container {
+        height: 400px;
+    }
+
     .highcharts-description {
         margin: 0.3rem 10px;
-    }
-    #c3-container {
-    height: 400px; /* o el alto que prefieras */
     }
 </style>
 
@@ -23,7 +24,12 @@
     //@ts-nocheck
     import { onMount } from "svelte";
 
-    const API = "/api/v1/ocupied-grand-stats";
+    let DEVEL_HOST= "http://localhost:16079";
+    let API= "/api/v1/ocupied-grand-stats";
+
+    if (dev){
+        API= DEVEL_HOST + API
+    };
 
     let apiData = [];
 
@@ -31,8 +37,7 @@
         try {
             const res = await fetch(API);
             if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-            const data = await res.json();
-            apiData = data;
+            apiData = await res.json();
         } catch (error) {
             console.error(`ERROR fetching data from ${API}: ${error}`);
         }
@@ -41,22 +46,30 @@
     onMount(async () => {
         await getData();
 
-        // Convertir datos a columnas tipo ['Provincia', totalGround]
+        if (!apiData || apiData.length === 0) {
+            console.warn("No data received");
+            return;
+        }
+
+        // Suponemos que cada entrada tiene formato: { province: '...', totalGround: number }
         const columns = apiData.map(entry => [
             entry.province,
             Number(entry.totalGround) || 0
         ]);
 
-        c3.generate({
-            bindto: '#c3-container',
-            data: {
-                columns: columns,
-                type: 'donut'
-            },
-            donut: {
-                title: "Ocupación por provincia"
-            }
-        });
+        // Espera a que el DOM esté listo
+        setTimeout(() => {
+            c3.generate({
+                bindto: '#c3-container',
+                data: {
+                    columns: columns,
+                    type: 'donut'
+                },
+                donut: {
+                    title: "Ocupación por provincia"
+                }
+            });
+        }, 100);
     });
 </script>
 
