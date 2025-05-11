@@ -14,12 +14,12 @@
       const response = await fetch(apiURL);
       const data = await response.json();
 
-      // Agrupamos por país y obtenemos temperaturas medias (asumiendo campo "averageTemperature")
-      const filtered = data.filter((item: any) => item.averageTemperature && item.country);
+      // Agrupamos por país y obtenemos temperaturas medias (asumiendo campo "average_temperature")
+      const filtered = data.filter((item: any) => item.average_temperature && item.province);
       const sorted = filtered.slice(0, 10); // Tomamos 10 primeros para simplificar
 
-      const labels = sorted.map((d: any) => d.country + " (" + d.year + ")");
-      const values = sorted.map((d: any) => d.averageTemperature);
+      const labels = sorted.map((d: any) => d.province + " (" + d.year + ")");
+      const values = sorted.map((d: any) => d.average_temperature);
 
       const ctx = (document.getElementById('tempChart') as HTMLCanvasElement).getContext('2d');
       if (chart) chart.destroy();
