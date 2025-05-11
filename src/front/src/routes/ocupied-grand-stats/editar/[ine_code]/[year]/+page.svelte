@@ -11,8 +11,23 @@
     import { get } from "svelte/store";
     import { goto } from '$app/navigation';
 
+
+
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/ocupied-grand-stats/";
+
+
+    let mensajeUsuario = "";
+    let tipoMensaje = "";
+    function mostrarMensaje(texto, tipo = "ok") {
+        mensajeUsuario = texto;
+        tipoMensaje = tipo;
+        setTimeout(() => mensajeUsuario = "", 3000);
+    }
+
+
+
+    
     if (dev) {
         API = DEVEL_HOST + API;
     }
@@ -72,9 +87,16 @@
             if (status ==200) {
                 console.log("Ocupied updated successfully");
                 console.log("Dato actualizado correctamente")
-                goto("/ocupied-grand-stats"); // recarga el dato actualizado
+                mostrarMensaje(`✅ Ocupación actualizado correctamente`, "ok")
+
+                setTimeout(() => {
+                    goto("/ocupied-grand-stats");
+                }, 1500);
+                //goto("/ocupied-grand-stats"); // recarga el dato actualizado
             } else {
                 console.error("Failed to update ocupied", res.status);
+                mostrarMensaje("❌ Error al ctualizar el ocupación", "error")
+
             }
         } catch (error) {
             console.error("Error updating ocupied", error);
@@ -128,3 +150,9 @@
         </tr>
     </tbody>
 </Table>
+
+{#if mensajeUsuario}
+    <div class={`alert ${tipoMensaje === "error" ? "alert-danger" : "alert-success"}`}>
+        {mensajeUsuario}
+    </div>
+{/if}

@@ -12,6 +12,21 @@
     
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/ocupied-grand-stats/";
+
+
+
+
+    let mensajeUsuario = "";
+    let tipoMensaje = "";
+    function mostrarMensaje(texto, tipo = "ok") {
+        mensajeUsuario = texto;
+        tipoMensaje = tipo;
+        setTimeout(() => mensajeUsuario = "", 3000);
+    }
+
+
+
+
     if(dev){
         API = DEVEL_HOST + API
     }
@@ -25,7 +40,7 @@
     let newOcupiedGrass;
     let newOcupiedWooded;
     let newOcupiedNon_agrarian_surface;
-
+    let status_mens = "";
 
     let provinces = [];
 
@@ -61,15 +76,19 @@
             resultStatus=status;
             if (status==200){
                 console.log(`Dato ine_code:${ine_code} borrado con éxito`)
+                status_mens = "Dato borrado"
+                mostrarMensaje(`✅ Ocupación ${ine_code} eliminado correctamente`, "ok")
                 getOcupieds();
             }else{
                 if(status ==404){
                     alert(`No se ha encontrado el dato ine_code:${ine_code} `)
+                    mostrarMensaje("❌ Error al eliminar el ocupación", "error")
                 }
                 console.log(`ERROR deleting Ocupied ${ine_code}: status received\n${status}`);
             }
         } catch (error) {
             console.log(`ERROR: GET data from ${API}: ${error}`);
+            mostrarMensaje("❌ Error al eliminar el ocupación", "error")
         }
     }
 
@@ -80,12 +99,15 @@
             resultStatus=status;
             if (status==200){
                 console.log("Todos los datos se han borrado")
+                mostrarMensaje("✅ Todos las ocupaciones han sido eliminados", "ok");
                 getOcupieds();
             }else {                
             console.log(`ERROR deleting all Ocupieds: status received\n${status}`);
+            mostrarMensaje("❌ Los datos ya estan borrados", "ok");
         }
         } catch (error) {
             console.log(`ERROR deleting all data from ${API}: ${error}`);
+            mostrarMensaje("❌ Los datos ya estan borrados", "ok");
         }
     }
 
@@ -118,6 +140,7 @@
             console.log(newOcupiedGrass)
             if (status==201){
                 console.log(`Ocupied created: \n${JSON.stringify(OcupiedsData,null,2)}`);
+                mostrarMensaje("✅ Ocupación creado correctamente", "ok");
                 getOcupieds();
                 newOcupiedIneCode = "";
                 newOcupiedProvince = "";
@@ -140,13 +163,16 @@
             }else{
                 if(status ==400){
                     alert(`Faltan datos por rellenar`)
+                    mostrarMensaje("⚠️ Datos inválidos o faltantes. Revisa los campos.", "error");
                 }else if(status ==409){
-                    alert(`Ya existen esos datos`)                    
+                    alert(`Ya existen esos datos`)   
+                    mostrarMensaje("⚠️ Ya existe una ocupacion con ese ID", "error");                 
                 }
                 console.log(`ERROR creating Ocupied:\n${status}`)
             }
         } catch (error) {
             console.log(`ERROR: GET data from ${API}: ${error}`)
+            mostrarMensaje("❌ Error al crear el accidente", "error");
         }
     }
 
@@ -158,14 +184,17 @@
             if (status==200) {
                 const data = await res.json();
                 console.log("Datos iniciales cargados");
+                mostrarMensaje("✅ Datos iniciales cargados correctamente", "ok");
                 getOcupieds();
             } else {
                 const errorText = await res.text();
                 console.error("Error:", errorText);
+                mostrarMensaje("❌ Error al cargar los datos iniciales", "error");
                 alert(`No se pudieron cargar los datos: ${errorText}`);
             }
         } catch (error) {
             console.error("Error de red:", error);
+            mostrarMensaje("❌ Error al cargar los datos iniciales", "error");
             alert(`Error de red al cargar los datos: ${error}`);
         }
     }
@@ -257,6 +286,29 @@
 
 
 <h2>ocupied-grand-stats</h2>
+
+
+{#if mensajeUsuario}
+    <div class={`alert ${tipoMensaje === "error" ? "alert-danger" : "alert-success"}`}>
+        {mensajeUsuario}
+    </div>
+{/if}
+<!-- 
+{#if resultStatus}
+    <div>
+        <strong>Estado:</strong> {resultStatus}
+    </div>
+{/if}
+
+{#if result}
+    <div>
+        <strong>Respuesta:</strong>
+        <pre>{result}</pre>
+    </div>
+{/if}
+-->
+
+
 <Table>
     <thead>
         <tr>

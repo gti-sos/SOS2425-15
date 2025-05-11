@@ -4,7 +4,7 @@
 		"name": "Gonzalo-L06",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "42360081",
-		"_collection_link": "https://bold-water-692884.postman.co/workspace/SOS2425-15~ac6f71c4-2c87-43f7-9611-f9979102d069/collection/42360081-5d402a92-fe75-45db-baf3-d191634f083c?action=share&source=collection_link&creator=42360081"
+		"_collection_link": "https://bold-water-692884.postman.co/workspace/ac6f71c4-2c87-43f7-9611-f9979102d069/collection/42360081-5d402a92-fe75-45db-baf3-d191634f083c?action=share&source=collection_link&creator=42360081"
 	},
 	"item": [
 		{
@@ -13,7 +13,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/temperature-stats/loadInitialDataGGT",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/loadInitialData",
 					"host": [
 						"{{BASE_URL}}"
 					],
@@ -21,7 +21,7 @@
 						"api",
 						"v1",
 						"temperature-stats",
-						"loadInitialDataGGT"
+						"loadInitialData"
 					]
 				}
 			},
@@ -29,6 +29,25 @@
 		},
 		{
 			"name": "Cargar dato especifico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Verify the response is an object\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -59,6 +78,10 @@
 						"exec": [
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify the response is an array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -101,6 +124,10 @@
 						"exec": [
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify the response is an array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -143,6 +170,10 @@
 						"exec": [
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify the response is an array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -378,7 +409,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/temperature-stats/loadInitialDataGGT",
+					"raw": "{{BASE_URL}}/api/v1/temperature-stats/loadInitialData",
 					"host": [
 						"{{BASE_URL}}"
 					],
@@ -386,7 +417,7 @@
 						"api",
 						"v1",
 						"temperature-stats",
-						"loadInitialDataGGT"
+						"loadInitialData"
 					]
 				}
 			},

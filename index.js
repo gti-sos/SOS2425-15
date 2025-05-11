@@ -18,13 +18,9 @@ const PORT = process.env.PORT || 16079;
 //app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
-app.use(cors(
-    {
-        origin: 'http://localhost:5173', // frontend origin
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true
-    }
-));
+
+app.use(cors());
+
 // Ruta para servir "about.html" en "/about"
 app.get("/about", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/about.html"));
