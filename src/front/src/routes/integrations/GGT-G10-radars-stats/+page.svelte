@@ -114,7 +114,7 @@
 <figure class="highcharts-figure">
   <div id="container"></div>
   <p class="highcharts-description">
-    (cambiar)Comparación  entre temperatura media en alguna provincia por año y media de velocidad multada por radares.
+    Comparación  entre temperatura media en alguna provincia por año y media de velocidad multada por radares.
   </p>
 </figure>
 
