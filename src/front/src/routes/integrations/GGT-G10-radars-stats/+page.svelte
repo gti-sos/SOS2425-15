@@ -25,37 +25,46 @@
     const remoteData = await remoteRes.json();
 
     // Tipar correctamente los objetos
-    const minimum_temperatureByYear: Record<number, number> = {};
+    const minimum_averageByYear: Record<number, number> = {};
     const averageSpeedFinedByYear: Record<number, number> = {};
+    const countByYear: Record<number, number> = {};
+
 
     for (const entry of localData) {
       const year = Number(entry.year);
-      const minimum_temperature = Number(entry.minimum_temperature) || 0;
-      minimum_temperatureByYear[year] = (minimum_temperatureByYear[year] || 0) + minimum_temperature;
+      const minimum_average = Number(entry.minimum_average) || 0;
+      minimum_averageByYear[year] = (minimum_averageByYear[year] || 0) + minimum_average;
     }
 
     for (const entry of remoteData) {
       const year = Number(entry.year);
       const averageSpeedFined = Number(entry.averageSpeedFined) || 0;
+
       averageSpeedFinedByYear[year] = (averageSpeedFinedByYear[year] || 0) + averageSpeedFined;
+      countByYear[year] = (countByYear[year] || 0) + 1;
+    }
+
+    for (const year in averageSpeedFinedByYear) {
+      const y = Number(year);
+      averageSpeedFinedByYear[y] = averageSpeedFinedByYear[y] / countByYear[y];
     }
 
     const allYears: number[] = Array.from(
-      new Set([...Object.keys(minimum_temperatureByYear), ...Object.keys(averageSpeedFinedByYear)].map(Number))
+      new Set([...Object.keys(minimum_averageByYear), ...Object.keys(averageSpeedFinedByYear)].map(Number))
     ).sort((a, b) => a - b);
 
-    const minimum_temperatureData = allYears.map(year => minimum_temperatureByYear[year] || 0);
+    const minimum_averageData = allYears.map(year => minimum_averageByYear[year] || 0);
     const regData = allYears.map(year => averageSpeedFinedByYear[year] || 0);
 
     console.log("Años:", allYears);
-    console.log("Temperaturas mínimas:", minimum_temperatureData);
+    console.log("Temperaturas mínimas:", minimum_averageData);
     console.log("Velocidad multada:", regData);
 
 
-    renderChart(allYears, minimum_temperatureData, regData);
+    renderChart(allYears, minimum_averageData, regData);
   }
 
-  function renderChart(years: number[], minimum_temperatureData: number[], regData: number[]): void {
+  function renderChart(years: number[], minimum_averageData: number[], regData: number[]): void {
     Highcharts.chart('container', {
       chart: {
         polar: true
@@ -64,7 +73,7 @@
         text: 'Comparación de temperatura mínima vs media velocidad Multada'
       },
       subtitle: {
-        text: 'Suma de Suelo Ocupado y (cambiar) velocidad multada'
+        text: 'Temperatura minima y velocidad media multada'
       },
       pane: {
         startAngle: 0,
@@ -83,8 +92,8 @@
       series: [
         {
           type: 'line',
-          name: 'Temperatura mínima (minimum_temperature)',
-          data: minimum_temperatureData,
+          name: 'Temperatura mínima (minimum_average)',
+          data: minimum_averageData,
           pointPlacement: 'on'
         },
         {
@@ -105,7 +114,7 @@
 <figure class="highcharts-figure">
   <div id="container"></div>
   <p class="highcharts-description">
-    (cambiar)Comparación polar entre superficie ocupada y matriculaciones generales por año.
+    (cambiar)Comparación  entre temperatura media en alguna provincia por año y media de velocidad multada por radares.
   </p>
 </figure>
 
