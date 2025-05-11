@@ -1,5 +1,7 @@
 <svelte:head>
-    <title>Edit Precipitation Info</title>
+    <title>
+        Edit Precipitation Info
+    </title>
 </svelte:head>
 
 <script>
@@ -7,12 +9,22 @@
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
     import { Table, Button } from "@sveltestrap/sveltestrap";
-    import { page } from "$app/stores";
-    import { get } from "svelte/store";
-    import { goto } from '$app/navigation';
+    //import { page } from "$app/stores";
+    //import { get } from "svelte/store";
+    //import { goto } from '$app/navigation';
 
     let DEVEL_HOST = "http://localhost:16079";
     let API = "/api/v1/precipitation-stats/";
+
+    let mensajeUsuario = "";
+    let tipoMensaje = "";
+    function mostrarMensaje(texto, tipo = "ok") {
+        mensajeUsuario = texto;
+        tipoMensaje = tipo;
+        setTimeout(() => mensajeUsuario = "", 3000);
+    }
+    
+    
     if (dev) {
         API = DEVEL_HOST + API;
     }
@@ -22,18 +34,18 @@
     let resultStatus = "";
 
     // Variables para editar
-    let editIneCode = "";
-    let editYear = "";
-    let editProvince = "";
-    let editAnnualPrecipitation = "";
-    let editHistoricalAverage = "";
-    let editDeviation = "";
-    let errorMessage = ""; // Mensaje de error
-    let successMessage = ""; // Mensaje de éxito
+    let editIneCode;
+    let editYear;
+    let editProvince;
+    let editAnnualPrecipitation;
+    let editHistoricalAverage;
+    let editDeviation;
+
+
+
 
     async function getPrecipitation() {
         resultStatus = result = "";
-        errorMessage = ""; // Limpiar mensaje de error
 
         const $page = get(page);
         let ineCode = $page.params.ine_code;
@@ -41,24 +53,20 @@
 
         try {
             const res = await fetch(`${API}${ineCode}`, { method: "GET" });
-            if (res.ok) {
-                const data = await res.json();
-                precipitation_stats = [data]; // aseguramos que sea array
-                const s = precipitation_stats[0];
+            const data = await res.json();
+            precipitation_stats = [data]; // aseguramos que sea array
+            const s = precipitation_stats[0];
 
-                // Rellenar inputs con valores del recurso
-                editIneCode = s.ine_code;
-                editYear = s.year;
-                editProvince = s.province;
-                editAnnualPrecipitation = s.annual_precipitation;
-                editHistoricalAverage = s.historical_average;
-                editDeviation = s.deviation;
-            } else {
-                errorMessage = "No se pudo obtener los datos de precipitación.";
-            }
+            // Rellenar inputs con valores del recurso
+            editIneCode = s.ine_code;
+            editYear = s.year;
+            editProvince = s.province;
+            editAnnualPrecipitation = s.annual_precipitation;
+            editHistoricalAverage = s.historical_average;
+            editDeviation = s.deviation;
+            
         } catch (error) {
             console.log(`ERROR: GET data from ${API}: ${error}`);
-            errorMessage = "Hubo un error al intentar obtener los datos.";
         }
     }
 
@@ -72,17 +80,21 @@
             },
             body: JSON.stringify(precipitation)
         });
+        let status = await res.status
+        if (status == 200) {
+            console.log("Precipitation updated successfully");
+            console.log("Dato actualizado correctamente")
+            mostrarMensaje(`✅ Precipitación actualizado correctamente`, "ok")
 
-        if (res.ok) {
-            successMessage = "Precipitación actualizada correctamente.";
-            goto("/precipitation-stats"); // Recarga el dato actualizado
+            setTimeout(() => {
+                goto("/precipitation-stats");
+            }, 1500);
         } else {
-            const errorData = await res.json();
-            errorMessage = `Error: ${res.status} - ${errorData.message || 'Hubo un error al actualizar la precipitación.'}`;
+            console.error("Failed to update precipitation", res.status);
+            mostrarMensaje("❌ Error al actualizar la precipitación", "error")
         }
     } catch (error) {
         console.error("Error updating precipitation", error);
-        errorMessage = "Hubo un error al intentar actualizar los datos.";
     }
 }
 
@@ -96,13 +108,6 @@
             historical_average: Number(editHistoricalAverage),
             deviation: Number(editDeviation)
         };
-
-        // Validación básica antes de actualizar
-        if (!updatedPrecipitation.province) {
-            errorMessage = "Todos los campos son obligatorios.";
-            return;
-        }
-
         updatePrecipitation(updatedPrecipitation);
     }
 
@@ -138,18 +143,11 @@
     </tbody>
 </Table>
 
-{#if errorMessage}
-    <div class="alert alert-danger">
-        {errorMessage}
+{#if mensajeUsuario}
+    <div class={`alert ${tipoMensaje === "error" ? "alert-danger" : "alert-success"}`}>
+        {mensajeUsuario}
     </div>
 {/if}
-
-{#if successMessage}
-    <div class="alert alert-success">
-        {successMessage}
-    </div>
-{/if}
-
 
 <!-- <svelte:head>
     <title> Edit Precipitation Info</title>
