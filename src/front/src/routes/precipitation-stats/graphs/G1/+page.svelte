@@ -1,87 +1,156 @@
+<!-- svelte-ignore css_unused_selector -->
 <svelte:head>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/bubble.js"></script>
-  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </svelte:head>
 
-<script lang="ts">
-  import { onMount } from 'svelte';
-
-  const precipitationAPI = "https://sos2425-15.onrender.com/api/v1/precipitation-stats";
-
-  onMount(async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const Highcharts = (window as any).Highcharts;
-    if (!Highcharts) {
-      console.error("Highcharts no está disponible");
-      return;
+<style>
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
     }
 
-    try {
-      const response = await fetch(precipitationAPI);
-      const data = await response.json();
+    #container {
+        height: 400px;
+    }
 
-      // Convertimos los datos a formato de burbuja
-      const bubbleData = data.map((entry: any) => ({
-        name: entry.province + ' - ' + entry.year,
-        x: entry.year,
-        y: entry.average_precipitation,
-        z: entry.max_precipitation
-      }));
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
 
-      Highcharts.chart('container', {
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    .highcharts-description {
+        margin: 0.3rem 10px;
+    }
+
+</style>
+
+<script>
+	//@ts-nocheck
+    import { onMount } from "svelte";
+    import{dev} from "$app/environment";
+
+    let DEVEL_HOST= "http://localhost:16079";
+    let API= "/api/v1/precipitation-stats";
+
+    if (dev){
+        API= DEVEL_HOST + API
+    };
+
+    let exChangesData=[];
+    let result="";
+    let resultStatus="";
+
+    async function getData(){
+        resultStatus = result = "";
+        try{
+            const res = await fetch(API,{method:"GET"});
+            const data= await res.json();
+
+
+            result = JSON.stringify(data,null,2);
+            exChangesData= data;
+            console.log(`response received : ${JSON.stringify(exChangesData,null,2)} `)
+        } catch (error){
+            console.log(`ERROR: GET from ${API}: ${error}`);
+        }
+    }
+    
+
+    onMount(async() =>{
+        await getData();
+        
+        const annualProvince = {};
+
+        exChangesData.forEach(entry => {
+            const province = entry.province;
+            const annual_precipitation = entry.annual_precipitation || 0;
+
+            if (annualProvince[province]) {
+                annualProvince[province] += annual_precipitation;
+            } else {
+                annualProvince[province] = annual_precipitation;
+            }
+        });
+
+        const categories = Object.keys(annualProvince);
+        const precipitacionData = Object.values(annualProvince);    
+        
+        Highcharts.chart('container', {
         chart: {
-          type: 'bubble',
-          plotBorderWidth: 1,
-          zoomType: 'xy'
+            type: 'column'
         },
         title: {
-          text: 'Precipitación por Provincia y Año'
+            text: 'Total annual precipitation by province'
         },
+        
         xAxis: {
-          title: { text: 'Año' },
-          allowDecimals: false
+            categories: categories,
+            crosshair: true,
+            accessibility: {
+                description: 'provincia'
+            }
         },
         yAxis: {
-          title: { text: 'Precipitación media (mm)' }
+            min: 0,
+            title: {
+                text: 'total precipitation'
+            }
         },
         tooltip: {
-          useHTML: true,
-          headerFormat: '<b>{point.key}</b><br>',
-          pointFormat: 'Año: {point.x}<br>Media: {point.y} mm<br>Máxima: {point.z} mm'
+            valueSuffix: ' (1000 MT)'
         },
         plotOptions: {
-          bubble: {
-            minSize: 10,
-            maxSize: 50
-          }
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
         },
         series: [{
-          name: 'Provincias',
-          data: bubbleData
+            name: 'Precipitation',
+            data: precipitacionData
         }]
-      });
-    } catch (error) {
-      console.error("Error cargando datos:", error);
-    }
-  });
+    });
+    });
+
 </script>
 
 <figure class="highcharts-figure">
-  <div id="container" style="height: 500px;"></div>
-  <p class="highcharts-description">
-    Gráfico de burbujas que muestra la precipitación media y máxima por provincia y año.
-  </p>
+    <div id="container"></div>
+    
 </figure>
-
-<style>
-  .highcharts-figure {
-    max-width: 800px;
-    margin: auto;
-  }
-  .highcharts-description {
-    text-align: center;
-    margin-top: 1rem;
-  }
-</style>

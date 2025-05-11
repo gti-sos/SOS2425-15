@@ -6,7 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const accidentsAPI = "https://sos2425-10.onrender.com/api/v2/accidents-stats";
+  const homeStatsAPI = "https://sos2425-21.onrender.com/api/v1/home-buying-selling-stats";
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -18,48 +18,55 @@
     }
 
     try {
-      const response = await fetch(accidentsAPI);
+      const response = await fetch(homeStatsAPI);
       const data = await response.json();
 
-      // Agrupar accidentes por provincia
+      // Agrupar por provincia (suma de viviendas compradas)
       const grouped: Record<string, number> = {};
+
       data.forEach((entry: any) => {
         const province = entry.province;
-        const accidents = entry.number_of_accidents || 0;
+        const bought = entry.homes_bought || 0;
         if (!grouped[province]) {
           grouped[province] = 0;
         }
-        grouped[province] += accidents;
+        grouped[province] += bought;
       });
 
-      const categories = Object.keys(grouped);
-      const seriesData = Object.values(grouped);
+      const pieData = Object.entries(grouped).map(([province, totalBought]) => ({
+        name: province,
+        y: totalBought
+      }));
 
       Highcharts.chart('container', {
         chart: {
-          type: 'column'
+          type: 'pie'
         },
         title: {
-          text: 'Número total de accidentes por provincia'
-        },
-        xAxis: {
-          categories: categories,
-          title: { text: 'Provincia' },
-          crosshair: true
-        },
-        yAxis: {
-          min: 0,
-          title: { text: 'Accidentes' }
+          text: 'Distribución de viviendas compradas por provincia'
         },
         tooltip: {
-          shared: true,
-          useHTML: true,
-          headerFormat: '<b>{point.key}</b><br>',
-          pointFormat: 'Accidentes: {point.y}'
+          pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+        },
+        accessibility: {
+          point: {
+            valueSuffix: '%'
+          }
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+          }
         },
         series: [{
-          name: 'Accidentes',
-          data: seriesData
+          name: 'Compras',
+          colorByPoint: true,
+          data: pieData
         }]
       });
     } catch (error) {
@@ -71,7 +78,7 @@
 <figure class="highcharts-figure">
   <div id="container" style="height: 500px;"></div>
   <p class="highcharts-description">
-    Gráfico de columnas que muestra el número total de accidentes reportados por provincia.
+    Gráfico de pastel que muestra la proporción de viviendas compradas por provincia.
   </p>
 </figure>
 
@@ -85,6 +92,3 @@
     margin-top: 1rem;
   }
 </style>
-
-
-
