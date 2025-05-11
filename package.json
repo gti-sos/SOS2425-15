@@ -14,6 +14,7 @@
     "inherits": "^2.0.4",
     "isarray": "^1.0.0",
     "nedb": "^1.8.0",
+    "node-fetch": "^3.3.2",
     "plotly.js": "^3.0.1",
     "plotly.js-dist": "^3.0.1",
     "process-nextick-args": "^1.0.7",
@@ -56,5 +57,9 @@
     "@types/highcharts": "^5.0.44",
     "@types/plotly.js": "^3.0.0",
     "start-server-and-test": "^2.0.11"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": []
 }

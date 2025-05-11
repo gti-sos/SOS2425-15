@@ -66,7 +66,7 @@
           type: 'packedbubble'
         },
         title: {
-          text: 'Ocupación de viviendas vs Temperatura media (por comunidad)'
+          text: 'Ocupación de viviendas vs Temperatura media (por provincia) y Precipitación anual'
         },
         tooltip: {
           useHTML: true,
