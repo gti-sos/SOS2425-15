@@ -6,7 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const uniAPI = "https://sos2425-17.onrender.com/api/v1/university-academic-perfomance";
+  const uniAPI = "https://sos2425-17.onrender.com/api/v2/university-academic-perfomance";
   const rainAPI = "https://sos2425-15.onrender.com/api/v1/precipitation-stats";
 
   onMount(async () => {

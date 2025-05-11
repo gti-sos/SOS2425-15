@@ -6,7 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const accidentsAPI = "https://sos2425-10.onrender.com/api/v2/accidents-stats";
+  const accidentsAPI = "https://sos2425-10.onrender.com/accidents-stats";
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
