@@ -6,7 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const cyberAPI = "https://sos2425-14.onrender.com/api/v1/cybercrime";
+  const cyberAPI = "https://sos2425-14.onrender.com/api/v1/cybercrime-data";
   const rainAPI = "https://sos2425-15.onrender.com/api/v1/precipitation-stats";
 
   onMount(async () => {
@@ -32,14 +32,14 @@
       const cyberMap: Record<string, number> = {};
       cyberData.forEach((entry: any) => {
         if (entry.year === targetYear) {
-          cyberMap[entry.province] = entry.total_cybercrimes || 0;
+          cyberMap[entry.autonomus_community] = entry.criminal_ofense || 0;
         }
       });
 
       const rainMap: Record<string, number> = {};
       rainData.forEach((entry: any) => {
         if (entry.year === targetYear) {
-          rainMap[entry.province] = entry.precipitation || 0;
+          rainMap[entry.province] = entry.annual_precipitation || 0;
         }
       });
 
