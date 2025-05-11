@@ -101,7 +101,7 @@
             const maximum_average = entry.maximum_average || 0;
 
             if (maximum_averageProvince[province]) {
-                maximum_averageProvince[province] += maximum_average;
+                maximum_averageProvince[province] = Math.max(maximum_averageProvince[province], maximum_average);
             } else {
                 maximum_averageProvince[province] = maximum_average;
             }
@@ -112,10 +112,10 @@
         
         Highcharts.chart('container', {
         chart: {
-            type: 'column'
+            type: 'bar'
         },
         title: {
-            text: 'Total maximum_average by province'
+            text: 'maximum_average by province'
         },
         
         xAxis: {
@@ -128,7 +128,7 @@
         yAxis: {
             min: 0,
             title: {
-                text: 'total maximum_average'
+                text: 'maximum_average'
             }
         },
         tooltip: {
