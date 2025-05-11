@@ -26,7 +26,7 @@
 
     // Tipar correctamente los objetos
     const minimum_temperatureByYear: Record<number, number> = {};
-    const complaintByYear: Record<number, number> = {};
+    const averageSpeedFinedByYear: Record<number, number> = {};
 
     for (const entry of localData) {
       const year = Number(entry.year);
@@ -36,16 +36,16 @@
 
     for (const entry of remoteData) {
       const year = Number(entry.year);
-      const total = Number(entry.total_general) || 0;
-      complaintByYear[year] = (complaintByYear[year] || 0) + total;
+      const averageSpeedFined = Number(entry.averageSpeedFined) || 0;
+      averageSpeedFinedByYear[year] = (averageSpeedFinedByYear[year] || 0) + total;
     }
 
     const allYears: number[] = Array.from(
-      new Set([...Object.keys(minimum_temperatureByYear), ...Object.keys(complaintByYear)].map(Number))
+      new Set([...Object.keys(minimum_temperatureByYear), ...Object.keys(averageSpeedFinedByYear)].map(Number))
     ).sort((a, b) => a - b);
 
     const minimum_temperatureData = allYears.map(year => minimum_temperatureByYear[year] || 0);
-    const regData = allYears.map(year => complaintByYear[year] || 0);
+    const regData = allYears.map(year => averageSpeedFinedByYear[year] || 0);
 
     renderChart(allYears, minimum_temperatureData, regData);
   }
@@ -56,10 +56,10 @@
         polar: true
       },
       title: {
-        text: 'Comparación de temperatura mínima vs (cambiar)Matriculaciones por Año'
+        text: 'Comparación de temperatura mínima vs media velocidad Multada'
       },
       subtitle: {
-        text: 'Suma de Suelo Ocupado y (cambiar)Matriculaciones Generales'
+        text: 'Suma de Suelo Ocupado y (cambiar) velocidad multada'
       },
       pane: {
         startAngle: 0,
@@ -84,7 +84,7 @@
         },
         {
           type: 'line',
-          name: 'Matriculaciones Generales (cambiar)',
+          name: 'Media velocidad multada',
           data: regData,
           pointPlacement: 'on'
         }
