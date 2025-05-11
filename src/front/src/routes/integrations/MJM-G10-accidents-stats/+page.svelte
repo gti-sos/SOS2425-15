@@ -6,7 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const accidentsAPI = "https://sos2425-10.onrender.com/accidents-stats";
+  const accidentsAPI = "https://sos2425-10.onrender.com/api/v2/accidents-stats";
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -25,7 +25,7 @@
       const grouped: Record<string, number> = {};
       data.forEach((entry: any) => {
         const province = entry.province;
-        const accidents = entry.number_of_accidents || 0;
+        const accidents = entry.total_victims || 0;
         if (!grouped[province]) {
           grouped[province] = 0;
         }
