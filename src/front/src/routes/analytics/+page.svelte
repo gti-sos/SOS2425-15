@@ -116,7 +116,7 @@
 <figure class="highcharts-figure">
   <div id="container" style="height: 600px;"></div>
   <p class="highcharts-description">
-    Cada burbuja representa una comunidad autónoma. El tamaño indica el número de viviendas ocupadas, y el color refleja la temperatura media anual.
+    Cada burbuja representa una provincia. El tamaño indica el número de terreno ocupados, y el color refleja la temperatura media anual y la precipitaon anual.
   </p>
 </figure>
 

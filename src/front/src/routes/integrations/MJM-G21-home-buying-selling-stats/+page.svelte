@@ -1,12 +1,8 @@
-<svelte:head>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/exporting.js"></script>
-</svelte:head>
-
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const homeStatsAPI = "https://sos2425-21.onrender.com/api/v1/home-buying-selling-stats";
+  const homeStatsAPI = "/proxy/home-buying";
+  const precipitationAPI = "/proxy/precipitation";
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -18,77 +14,71 @@
     }
 
     try {
-      const response = await fetch(homeStatsAPI);
-      const data = await response.json();
+      const [homeRes, precipRes] = await Promise.all([
+        fetch(homeStatsAPI),
+        fetch(precipitationAPI)
+      ]);
 
-      // Agrupar por provincia (suma de viviendas compradas)
-      const grouped: Record<string, number> = {};
+      const homeData = await homeRes.json();
+      const precipData = await precipRes.json();
 
-      data.forEach((entry: any) => {
-        const province = entry.province;
-        const bought = entry.transaction_new_housing || 0;
-        if (!grouped[province]) {
-          grouped[province] = 0;
-        }
-        grouped[province] += bought;
+      // Procesar datos: por ejemplo, combinar por provincia o año
+      const combined: Record<string, { bought: number, precip: number }> = {};
+
+      homeData.forEach((entry: any) => {
+        const key = entry.province;
+        if (!combined[key]) combined[key] = { bought: 0, precip: 0 };
+        combined[key].bought += entry.transaction_new_housing || 0;
       });
 
-      const pieData = Object.entries(grouped).map(([province, totalBought]) => ({
-        name: province,
-        y: totalBought
-      }));
+      precipData.forEach((entry: any) => {
+        const key = entry.province || entry.country || "Desconocido";
+        if (!combined[key]) combined[key] = { bought: 0, precip: 0 };
+        combined[key].precip += entry.precipitation_mm || 0;
+      });
+
+      // Datos para gráfico de columnas combinadas
+      const categories = Object.keys(combined);
+      const seriesBought = categories.map(k => combined[k].bought);
+      const seriesPrecip = categories.map(k => combined[k].precip);
 
       Highcharts.chart('container', {
-        chart: {
-          type: 'pie'
-        },
+        chart: { type: 'column' },
         title: {
-          text: 'Distribución de viviendas compradas por provincia'
+          text: 'Viviendas compradas vs Precipitación por provincia'
         },
+        xAxis: {
+          categories,
+          crosshair: true
+        },
+        yAxis: [{
+          title: { text: 'Viviendas Compradas' }
+        }, {
+          title: { text: 'Precipitación (mm)' },
+          opposite: true
+        }],
         tooltip: {
-          pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+          shared: true
         },
-        accessibility: {
-          point: {
-            valueSuffix: '%'
+        series: [
+          {
+            name: 'Viviendas Compradas',
+            type: 'column',
+            data: seriesBought,
+            yAxis: 0
+          },
+          {
+            name: 'Precipitación (mm)',
+            type: 'column',
+            data: seriesPrecip,
+            yAxis: 1
           }
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-              enabled: true,
-              format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-            }
-          }
-        },
-        series: [{
-          name: 'Compras',
-          colorByPoint: true,
-          data: pieData
-        }]
+        ]
       });
+
     } catch (error) {
       console.error("Error cargando datos:", error);
     }
   });
 </script>
 
-<figure class="highcharts-figure">
-  <div id="container" style="height: 500px;"></div>
-  <p class="highcharts-description">
-    Gráfico de pastel que muestra la proporción de viviendas compradas por provincia.
-  </p>
-</figure>
-
-<style>
-  .highcharts-figure {
-    max-width: 800px;
-    margin: auto;
-  }
-  .highcharts-description {
-    text-align: center;
-    margin-top: 1rem;
-  }
-</style>
