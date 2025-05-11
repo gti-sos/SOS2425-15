@@ -13,8 +13,8 @@
       // Agrupar por comunidad autónoma y sumar la precipitación total
       const grouped: Record<string, number> = {};
       data.forEach((entry: any) => {
-        const region = entry["autonomous_community"];
-        const precipitation = entry["annual_avg_precipitation"] || 0;
+        const region = entry["province"];
+        const precipitation = entry["annual_precipitation"] || 0;
 
         if (!grouped[region]) {
           grouped[region] = 0;
@@ -32,7 +32,7 @@
           data: {
             labels,
             datasets: [{
-              label: 'Precipitación anual por comunidad',
+              label: 'Precipitación anual por provincia',
               data: values,
               backgroundColor: 'rgba(54, 162, 235, 0.2)',
               borderColor: 'rgba(54, 162, 235, 1)',
@@ -45,7 +45,7 @@
             plugins: {
               title: {
                 display: true,
-                text: 'Precipitación anual promedio por comunidad autónoma'
+                text: 'Precipitación anual promedio por provincia'
               }
             },
             scales: {
