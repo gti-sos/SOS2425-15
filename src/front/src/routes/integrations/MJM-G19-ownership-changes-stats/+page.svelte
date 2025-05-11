@@ -7,7 +7,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const apiURL = "https://sos2425-19.onrender.com/api/v2/ownership-changes-stats";
+  const apiURL = "https://sos2425-19.onrender.com/api/v2/ownerships-changes-stats/";
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -27,10 +27,10 @@
       const allYears = new Set<number>();
 
       data.forEach((entry: any) => {
-        const { province, year, ownership_changes } = entry;
+        const { province, year, car } = entry;
         allYears.add(year);
         if (!grouped[province]) grouped[province] = {};
-        grouped[province][year] = (grouped[province][year] || 0) + (ownership_changes || 0);
+        grouped[province][year] = (grouped[province][year] || 0) + (car|| 0);
       });
 
       const sortedYears = Array.from(allYears).sort((a, b) => a - b);
@@ -45,7 +45,7 @@
           type: 'area'
         },
         title: {
-          text: 'Cambios de titularidad por provincia y año'
+          text: 'Coches por provincia y año'
         },
         xAxis: {
           categories: sortedYears,
@@ -53,7 +53,7 @@
           title: { text: 'Año' }
         },
         yAxis: {
-          title: { text: 'Cambios de titularidad' }
+          title: { text: 'Coches' }
         },
         tooltip: {
           split: true,
@@ -81,7 +81,8 @@
 <figure class="highcharts-figure">
   <div id="container" style="height: 500px;"></div>
   <p class="highcharts-description">
-    Gráfico de áreas apiladas que muestra los cambios de titularidad en distintas provincias a lo largo del tiempo.
+    Gráfico de áreas apiladas que muestra los Coches
+     en distintas provincias a lo largo del tiempo.
   </p>
 </figure>
 
