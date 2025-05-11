@@ -33,9 +33,9 @@
       });
 
       precipData.forEach((entry: any) => {
-        const key = entry.province || entry.country || "Desconocido";
+        const key = entry.province || "Desconocido";
         if (!combined[key]) combined[key] = { bought: 0, precip: 0 };
-        combined[key].precip += entry.precipitation_mm || 0;
+        combined[key].precip += entry.annual_precipitation || 0;
       });
 
       // Datos para gráfico de columnas combinadas
