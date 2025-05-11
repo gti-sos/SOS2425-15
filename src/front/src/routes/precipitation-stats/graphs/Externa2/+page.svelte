@@ -1,3 +1,9 @@
+<svelte:head>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/sunburst.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</svelte:head>
+
 <script lang="ts">
   import { onMount } from 'svelte';
 
@@ -11,8 +17,6 @@
   };
 
   onMount(async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-
     const Highcharts = (window as any).Highcharts;
     if (!Highcharts) {
       console.error("Highcharts no está disponible");
@@ -113,6 +117,25 @@
     }
   });
 </script>
+
+<figure class="highcharts-figure">
+  <div id="container" style="height: 600px;"></div>
+  <p class="highcharts-description">
+    Gráfico de sol que muestra la jerarquía de continentes, subregiones y países, con el tamaño representando la población.
+  </p>
+</figure>
+
+<style>
+  .highcharts-figure {
+    max-width: 1000px;
+    margin: auto;
+  }
+  .highcharts-description {
+    text-align: center;
+    margin-top: 1rem;
+  }
+</style>
+
 
 
 
