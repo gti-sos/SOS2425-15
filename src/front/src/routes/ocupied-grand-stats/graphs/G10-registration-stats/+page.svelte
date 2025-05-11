@@ -1,92 +1,154 @@
-<script>
-    // @ts-nocheck
-    import { onMount } from 'svelte';
-    let chartDiv;
-    let chart;
-  
-    async function loadData() {
-      const ApexCharts = (await import('apexcharts')).default;
-  
-      const res1 = await fetch('https://sos2425-10.onrender.com/api/v1/registrations-stats');
-      const data1 = await res1.json();
-  
-      const res2 = await fetch('https://sos2425-12.onrender.com/api/v1/ocupied-grand-stats');
-      const data2 = await res2.json();
-  
-      const years = [...new Set(data1.map(d => d.year))]
-        .filter(y => data2.some(e => e.year == y))
-        .sort();
-  
-      const grouped = {};
-      years.forEach(y => {
-        grouped[y] = { total: 0, power: 0 };
-      });
-  
-      data1.forEach(d => {
-        if (grouped[d.year]) {
-          grouped[d.year].total +=
-            (d.total_general_national || 0) +
-            (d.total_general_import || 0) +
-            (d.total_general_auction || 0);
-        }
-      });
-  
-      data2.forEach(d => {
-        if (grouped[d.year]) {
-          grouped[d.year].power += d.installed_power || 0;
-        }
-      });
-  
-      const totalVehiculos = [], potencia = [];
-      years.forEach(y => {
-        totalVehiculos.push(grouped[y].total);
-        potencia.push(grouped[y].power);
-      });
-  
-      const options = {
-        chart: {
-          type: 'bar',
-          height: 450,
-          stacked: true
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true,
-          }
-        },
-        xaxis: {
-          title: {
-            text: 'Cantidad acumulada'
-          }
-        },
-        yaxis: {
-          categories: years,
-          title: {
-            text: 'Año'
-          }
-        },
-        tooltip: {
-          shared: true,
-          intersect: false
-        },
-        series: [
-          {
-            name: 'Total vehículos',
-            data: totalVehiculos
-          },
-          {
-            name: 'Potencia instalada (MW)',
-            data: potencia
-          }
-        ]
-      };
-  
-      chart = new ApexCharts(chartDiv, options);
-      chart.render();
+<svelte:head>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</svelte:head>
+
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { dev } from '$app/environment';
+
+  // @ts-ignore
+  const Highcharts = window.Highcharts;
+
+  const localAPI = "https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats";
+  const remoteAPI = "https://sos2425-10.onrender.com/api/v1/registrations-stats";
+
+  async function fetchAndProcessData(): Promise<void> {
+    const [localRes, remoteRes] = await Promise.all([
+      fetch(localAPI),
+      fetch(remoteAPI)
+    ]);
+    const localData = await localRes.json();
+    const remoteData = await remoteRes.json();
+
+    // Tipar correctamente los objetos
+    const groundByYear: Record<number, number> = {};
+    const registrationsByYear: Record<number, number> = {};
+
+    for (const entry of localData) {
+      const year = Number(entry.year);
+      const ground = Number(entry.ground) || 0;
+      groundByYear[year] = (groundByYear[year] || 0) + ground;
     }
-  
-    onMount(loadData);
-  </script>
-  
-  <h2>Integración G10-registrations-stats</h2>
-  <div bind:this={chartDiv}></div>  
+
+    for (const entry of remoteData) {
+      const year = Number(entry.year);
+      const total = Number(entry.total_general) || 0;
+      registrationsByYear[year] = (registrationsByYear[year] || 0) + total;
+    }
+
+    const allYears: number[] = Array.from(
+      new Set([...Object.keys(groundByYear), ...Object.keys(registrationsByYear)].map(Number))
+    ).sort((a, b) => a - b);
+
+    const groundData = allYears.map(year => groundByYear[year] || 0);
+    const regData = allYears.map(year => registrationsByYear[year] || 0);
+
+    renderChart(allYears, groundData, regData);
+  }
+
+  function renderChart(years: number[], groundData: number[], regData: number[]): void {
+    Highcharts.chart('container', {
+      chart: {
+        polar: true
+      },
+      title: {
+        text: 'Comparación de Ocupación de Suelo vs Matriculaciones por Año'
+      },
+      subtitle: {
+        text: 'Suma de Suelo Ocupado y Matriculaciones Generales'
+      },
+      pane: {
+        startAngle: 0,
+        endAngle: 360
+      },
+      xAxis: {
+        categories: years.map(String),
+        tickmarkPlacement: 'on',
+        lineWidth: 0
+      },
+      yAxis: {
+        gridLineInterpolation: 'polygon',
+        lineWidth: 0,
+        min: 0
+      },
+      series: [
+        {
+          type: 'line',
+          name: 'Suelo Ocupado (ground)',
+          data: groundData,
+          pointPlacement: 'on'
+        },
+        {
+          type: 'line',
+          name: 'Matriculaciones Generales',
+          data: regData,
+          pointPlacement: 'on'
+        }
+      ]
+    });
+  }
+
+  onMount(() => {
+    fetchAndProcessData();
+  });
+</script>
+
+<figure class="highcharts-figure">
+  <div id="container"></div>
+  <p class="highcharts-description">
+    Comparación polar entre superficie ocupada y matriculaciones generales por año.
+  </p>
+</figure>
+
+<style>
+.highcharts-figure,
+.highcharts-data-table table {
+  min-width: 320px;
+  max-width: 660px;
+  margin: 1em auto;
+}
+
+.highcharts-data-table table {
+  font-family: Verdana, sans-serif;
+  border-collapse: collapse;
+  border: 1px solid #ebebeb;
+  margin: 10px auto;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.highcharts-data-table caption {
+  padding: 1em 0;
+  font-size: 1.2em;
+  color: #555;
+}
+
+.highcharts-data-table th {
+  font-weight: 600;
+  padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+  padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tbody tr:nth-child(even) {
+  background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+  background: #f1f7ff;
+}
+
+.highcharts-description {
+  margin: 0.3rem 10px;
+}
+</style>
