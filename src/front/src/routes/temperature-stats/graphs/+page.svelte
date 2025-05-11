@@ -131,9 +131,10 @@
                 text: 'maximum_average'
             }
         },
-        tooltip: {
-            valueSuffix: ' (1000 MT)'
-        },
+        //tooltip: {
+        //   valueSuffix: ' (1000 MT)'
+        //},
+        
         plotOptions: {
             column: {
                 pointPadding: 0.2,
