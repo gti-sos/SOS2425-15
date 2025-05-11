@@ -153,4 +153,4 @@
 <figure class="highcharts-figure">
     <div id="container"></div>
     
-</figure>
+</figure>   

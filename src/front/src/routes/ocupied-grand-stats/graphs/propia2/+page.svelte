@@ -1,54 +1,62 @@
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-    <meta charset="UTF-8" />
-    <title>Gráfico de Superficie No Agraria</title>
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    </head>
-    <body>
-    <h2>Distribución de Superficie No Agraria por Provincia (2021)</h2>
-    <div id="grafico" style="width:600px;height:600px;"></div>
+<!-- svelte-ignore css_unused_selector -->
+<svelte:head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+</svelte:head>
 
-    <script>
-        async function cargarDatos() {
+<style>
+    .c3-chart {
+        max-width: 600px;
+        margin: 1rem auto;
+    }
+
+    .highcharts-description {
+        margin: 0.3rem 10px;
+    }
+</style>
+
+<script>
+    //@ts-nocheck
+    import { onMount } from "svelte";
+
+    const API = "/api/v1/ocupied-grand-stats";
+
+    let apiData = [];
+
+    async function getData() {
         try {
-            const respuesta = await fetch("https://sos2425-15.onrender.com/api/v1/ocupied-grand-stats/");
-            const datos = await respuesta.json();
-
-            // Filtrar solo los datos del año 2021
-            const datos2021 = datos.filter(item => item.year === 2021);
-
-            // Agrupar por provincia, sumando superficies no agrarias
-            const agrupado = {};
-            datos2021.forEach(d => {
-            if (!agrupado[d.province]) {
-                agrupado[d.province] = 0;
-            }
-            agrupado[d.province] += d.non_agrarian_surface;
-            });
-
-            const provincias = Object.keys(agrupado);
-            const superficies = Object.values(agrupado);
-
-            const data = [{
-            type: "pie",
-            labels: provincias,
-            values: superficies,
-            textinfo: "label+percent",
-            hoverinfo: "label+value"
-            }];
-
-            Plotly.newPlot("grafico", data);
+            const res = await fetch(API);
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            const data = await res.json();
+            apiData = data;
         } catch (error) {
-            console.error("Error al cargar los datos:", error);
-            const div = document.getElementById("grafico");
-            if (div) {
-            div.innerText = "Error al cargar los datos.";
-            }
+            console.error(`ERROR fetching data from ${API}: ${error}`);
         }
-        }
+    }
 
-        cargarDatos();
-    </script>
-    </body>
-    </html>
+    onMount(async () => {
+        await getData();
+
+        // Convertir datos a columnas tipo ['Provincia', totalGround]
+        const columns = apiData.map(entry => [
+            entry.province,
+            Number(entry.totalGround) || 0
+        ]);
+
+        c3.generate({
+            bindto: '#c3-container',
+            data: {
+                columns: columns,
+                type: 'donut'
+            },
+            donut: {
+                title: "Ocupación por provincia"
+            }
+        });
+    });
+</script>
+
+<figure class="highcharts-figure">
+    <div id="c3-container" class="c3-chart"></div>
+</figure>
