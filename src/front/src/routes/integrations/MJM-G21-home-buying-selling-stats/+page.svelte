@@ -6,7 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const homeStatsAPI = "https://sos2425-21.onrender.com/home-buying-selling-stats";
+  const homeStatsAPI = "https://sos2425-21.onrender.com/api/v1/home-buying-selling-stats";
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -26,7 +26,7 @@
 
       data.forEach((entry: any) => {
         const province = entry.province;
-        const bought = entry.homes_bought || 0;
+        const bought = entry.transaction_new_housing || 0;
         if (!grouped[province]) {
           grouped[province] = 0;
         }
