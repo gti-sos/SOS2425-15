@@ -1,23 +1,22 @@
 <svelte:head>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
+  <script src="https://code.highcharts.com/modules/sunburst.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
 </svelte:head>
 
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const airStatsAPI = "https://sos2425-24.onrender.com/api/v1/air-transport-stats";
+  const countriesAPI = "https://restcountries.com/v3.1/all";
 
-  type AirData = {
-    country: string;
-    total_passengers: number;
-    total_flights: number;
+  type SunburstNode = {
+    id: string;
+    parent?: string;
+    name: string;
+    value?: number;
   };
 
   onMount(async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-
     const Highcharts = (window as any).Highcharts;
     if (!Highcharts) {
       console.error("Highcharts no está disponible");
@@ -25,52 +24,110 @@
     }
 
     try {
-      const response = await fetch(airStatsAPI);
-      const stats: AirData[] = await response.json();
+      const response = await fetch(countriesAPI);
+      const countries = await response.json();
 
-      const data = stats
-        .filter(d => d.total_passengers > 0 && d.total_flights > 0)
-        .map(d => ({
-          name: d.country,
-          y: d.total_flights,
-          z: d.total_passengers
-        }));
+      const data: SunburstNode[] = [];
+      const continents = new Set<string>();
+      const subregions = new Set<string>();
+
+      countries.forEach((country: any) => {
+        const continent = country.region || 'Other';
+        const subregion = country.subregion || 'Other';
+        const countryName = country.name?.common;
+        const population = country.population || 0;
+
+        if (!continent || !subregion || !countryName) return;
+
+        continents.add(continent);
+        subregions.add(`${continent}-${subregion}`);
+
+        data.push({
+          id: countryName,
+          parent: `${continent}-${subregion}`,
+          name: countryName,
+          value: population
+        });
+      });
+
+      continents.forEach((continent) => {
+        data.push({
+          id: continent,
+          parent: '',
+          name: continent
+        });
+      });
+
+      subregions.forEach((subregionCombo) => {
+        const [continent, subregion] = subregionCombo.split('-');
+        data.push({
+          id: subregionCombo,
+          parent: continent,
+          name: subregion
+        });
+      });
 
       Highcharts.chart('container', {
         chart: {
-          type: 'variablepie'
+          height: '100%'
         },
         title: {
-          text: 'Transporte aéreo por país: vuelos vs pasajeros'
-        },
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '<b>{point.name}</b><br/>Vuelos: {point.y}<br/>Pasajeros: {point.z}'
+          text: 'Distribución de países por continente y subregión'
         },
         series: [{
-          minPointSize: 10,
-          innerSize: '20%',
-          zMin: 0,
-          name: 'Países',
-          data
-        }]
+          type: "sunburst",
+          data: data,
+          allowDrillToNode: true,
+          cursor: 'pointer',
+          dataLabels: {
+            format: '{point.name}',
+            filter: {
+              property: 'innerArcLength',
+              operator: '>',
+              value: 16
+            }
+          },
+          levels: [{
+            level: 1,
+            colorByPoint: true,
+            dataLabels: {
+              rotationMode: 'parallel'
+            }
+          }, {
+            level: 2,
+            colorByPoint: true,
+            dataLabels: {
+              rotationMode: 'parallel'
+            }
+          }, {
+            level: 3,
+            colorVariation: {
+              key: 'brightness',
+              to: -0.5
+            }
+          }]
+        }],
+        tooltip: {
+          headerFormat: "",
+          pointFormat: '<b>{point.name}</b>: {point.value} habitantes'
+        }
       });
-    } catch (err) {
-      console.error("Error cargando datos:", err);
+    } catch (error) {
+      console.error("Error cargando datos:", error);
     }
   });
 </script>
 
 <figure class="highcharts-figure">
-  <div id="container" style="height: 500px;"></div>
+  <div id="container" style="height: 600px;"></div>
   <p class="highcharts-description">
-    Gráfico de pastel variable: el tamaño representa el número de vuelos y el radio, la cantidad de pasajeros.
+    Gráfico de sol que muestra la jerarquía de continentes, subregiones y países, con el tamaño representando la población.
   </p>
 </figure>
 
 <style>
   .highcharts-figure {
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
   }
   .highcharts-description {
@@ -78,6 +135,7 @@
     margin-top: 1rem;
   }
 </style>
+
 
 
 
