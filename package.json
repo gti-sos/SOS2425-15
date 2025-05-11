@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "apexcharts": "^4.7.0",
+    "chart.js": "^4.4.9",
     "core-util-is": "^1.0.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
