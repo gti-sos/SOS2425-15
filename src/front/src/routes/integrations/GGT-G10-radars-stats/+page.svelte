@@ -37,7 +37,7 @@
     for (const entry of remoteData) {
       const year = Number(entry.year);
       const averageSpeedFined = Number(entry.averageSpeedFined) || 0;
-      averageSpeedFinedByYear[year] = (averageSpeedFinedByYear[year] || 0) + total;
+      averageSpeedFinedByYear[year] = (averageSpeedFinedByYear[year] || 0) + averageSpeedFined;
     }
 
     const allYears: number[] = Array.from(
@@ -46,6 +46,11 @@
 
     const minimum_temperatureData = allYears.map(year => minimum_temperatureByYear[year] || 0);
     const regData = allYears.map(year => averageSpeedFinedByYear[year] || 0);
+
+    console.log("Años:", allYears);
+    console.log("Temperaturas mínimas:", minimum_temperatureData);
+    console.log("Velocidad multada:", regData);
+
 
     renderChart(allYears, minimum_temperatureData, regData);
   }
