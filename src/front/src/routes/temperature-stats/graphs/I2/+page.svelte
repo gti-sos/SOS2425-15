@@ -14,7 +14,7 @@
       const response = await fetch(apiURL);
       const data = await response.json();
 
-      // Agrupamos por país y obtenemos temperaturas medias (asumiendo campo "average_temperature")
+      // Agrupamos por país y obtenemos temperaturas medias
       const filtered = data.filter((item: any) => item.average_temperature && item.province);
       const sorted = filtered.slice(0, 10); // Tomamos 10 primeros para simplificar
 

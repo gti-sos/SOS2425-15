@@ -67,7 +67,7 @@
   function renderChart(years: number[], minimum_averageData: number[], regData: number[]): void {
     Highcharts.chart('container', {
       chart: {
-        type: 'column' // 👉 CAMBIAMOS A COLUMNAS
+        type: 'column' 
       },
       title: {
         text: 'Comparación de temperatura mínima vs total de trabajos (hombres y mujeres)'
