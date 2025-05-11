@@ -37,7 +37,7 @@
     }
 
     for (const entry of remoteData) {
-      const year = Number(entry.year);
+      const year = Number(entry.total_work_sus);
       const total_work_sus = Number(entry.total_work_sus) || 0;
 
       total_work_susByYear[year] = (total_work_susByYear[year] || 0) + total_work_sus;
