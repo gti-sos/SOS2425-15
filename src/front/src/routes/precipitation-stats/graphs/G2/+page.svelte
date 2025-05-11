@@ -29,16 +29,18 @@
     }));
 
     const layout = {
-  title: { text: "Distribución de Promedios Históricos de Precipitación por Año" },
-  yaxis: {
-    zeroline: false,
-    title: { text: 'Historical Average (mm)' }
-  },
-  violingap: 0,
-  violinmode: 'overlay',
-  height: 600
-} as any;
+      title: { text: "Distribución de Promedios Históricos de Precipitación por Año" },
+      yaxis: {
+        zeroline: false,
+        title: { text: 'Historical Average (mm)' }
+      },
+      violingap: 0,
+      violinmode: 'overlay',
+      height: 600
+    } as any;
 
+    Plotly.newPlot('container', traces, layout);
+  });
 </script>
 
 <div id="container" style="width: 100%; max-width: 1000px; margin: auto;"></div>
