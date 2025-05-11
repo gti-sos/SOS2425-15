@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  const homeStatsAPI = "/proxy/home-buying";
-  const precipitationAPI = "/proxy/precipitation";
+  const homeStatsAPI = "http://localhost:3001/proxy/home-buying";
+  const precipitationAPI = "http://localhost:3001/proxy/precipitation";
+
 
   onMount(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
